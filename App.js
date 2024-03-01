@@ -1,12 +1,12 @@
 import React from 'react';
-import { ScrollView, StyleSheet,Text, View,} from 'react-native';
 import { store } from './src/Redux/store';
 import { Provider } from 'react-redux';
-import UsersList from './src/Components/UsersList'
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack';
+import Home from './src/Components/Home';
+import AddUserForm from './src/Components/AddUserForm';
 
-const Stack = createNativeStackNavigator()
+const Stack = createStackNavigator()
 
 function App() {
     
@@ -17,34 +17,20 @@ function App() {
         <Stack.Screen 
           name='Home'
           component={Home}
-          options={{title:'Welcome To All Users'}}/>
+          options={{title:'Welcome To All Users'}}
+          />
         <Stack.Screen 
-          name='AddUsers'
+          name='AddUserForm'
           component={AddUserForm}
-          options={{title: 'Add New User'}}/>
+          options={{title: 'Add New User'}}
+          />
 
       </Stack.Navigator>
-      {/* <View style={styles.main}>
-        <Text style={styles.text}>
-          Hello Users
-        </Text>
-        <UsersList /> 
-      </View> */}
+      
     </Provider>
     </NavigationContainer>
     )
   }
 
-  const styles = StyleSheet.create({
-    main: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginTop: 30,
-    },
-    text: {
-      fontSize: 30,
-
-    }
-  })
+  
 export default App;

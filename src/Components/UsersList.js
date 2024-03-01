@@ -7,8 +7,8 @@ const UsersList = () => {
     const users = useSelector(selectAllUsers)
 
     const renderedUsers = users.map(user => (
-        <View>
-            <Text key={user.id}>{user.name} and {user.age}</Text>
+        <View key={user.id}>
+            <Text >{user.name} and {user.age}</Text>
         </View>
     ))
   return (
