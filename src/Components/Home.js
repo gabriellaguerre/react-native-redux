@@ -1,7 +1,6 @@
 import React from 'react'
 import { Text, View, StyleSheet, Button } from 'react-native'
 import UsersList from './UsersList'
-import AddUserForm from './AddUserForm'
 
 function Home({navigation}) {
   
@@ -11,9 +10,12 @@ function Home({navigation}) {
         <Text style={styles.text}>
           Hello Users
         </Text>
-        <Button 
+        <View style={styles.button}>
+        <Button  
           title='Add new user'
-          onPress={()=> navigation.navigate('AddUserForm')}/>
+          onPress={()=> navigation.navigate('AddUserForm')}
+          />
+          </View>
         <UsersList /> 
       </View>
    
@@ -29,7 +31,11 @@ const styles = StyleSheet.create({
     },
     text: {
       fontSize: 30,
+      margin: 10,
 
+    },
+    button: {
+      margin: 10,
     }
   })
 

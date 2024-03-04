@@ -11,12 +11,7 @@ function AddUserForm({navigation}) {
 
     const handleSubmit = () => {
         if(name && age){
-          dispatch(userAdded({
-            id: nanoid(),
-            name: name,
-            age: age,
-          })
-          )
+          dispatch(userAdded(name, age))
           setName('')
           setAge('')
           navigation.navigate("Home")
@@ -38,12 +33,14 @@ function AddUserForm({navigation}) {
             placeholder='Enter your age'
             value={age}
             onChangeText={age => setAge(age)}/>
-        <Button 
-            style={styles.button}
+        <View style={styles.button}>
+        <Button
+            color='red' 
             title='Submit'
             onPress={handleSubmit}
             />
-      </View>
+        </View>
+        </View>
     )
 }
 const styles = StyleSheet.create({
@@ -59,7 +56,10 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   button: {
-    width: 30,
+    width: 100,
+    alignSelf:'center',
+    margin: 10,
+    backgroundColor: 'green'
   }
 })
 
