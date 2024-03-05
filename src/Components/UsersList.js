@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import React from 'react'
 import { ScrollView, View, Text } from "react-native";
-import { selectAllUsers, getUsersStatus, getUsersError, fetchUsers, fetchCsrfToken } from "../Redux/usersSlice";
+import { selectAllUsers, getUsersStatus, getUsersError, fetchUsers } from "../Redux/usersSlice";
 import { useEffect } from "react";
 
 const UsersList = () => {
@@ -11,19 +11,18 @@ const UsersList = () => {
     const error = useSelector(getUsersError)
 
     useEffect(()=>{
-      if(status==='idle'){
-        // dispatch(fetchCsrfToken())
-      }
+        dispatch(fetchUsers())
     }, [status, dispatch])
-    console.log(users, "USER IN USERS LIST COMPONENT")
-    const renderedUsers = users.map(user => (
-        <View key={user.id}>
-            <Text >{user.name} and {user.age}</Text>
-        </View>
-    ))
+
+   
   return (
     <View>
-      {renderedUsers}
+      {users.map(user => (
+        <View key={user.id}>
+            <Text >{user.employeeID} is {user.accessLevel}</Text>
+        </View>
+    ))}
+   
     </View>
   )
 }
