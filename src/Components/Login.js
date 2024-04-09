@@ -2,7 +2,7 @@ import React from 'react'
 import { Text, View, StyleSheet, Button } from 'react-native'
 import UsersList from './UsersList'
 
-function Home({navigation}) {
+function Login({navigation}) {
   
     return (
     
@@ -39,4 +39,4 @@ const styles = StyleSheet.create({
     }
   })
 
-export default Home;
+export default Login;

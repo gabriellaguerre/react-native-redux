@@ -1,7 +1,7 @@
 import { createSlice, nanoid, createAsyncThunk } from "@reduxjs/toolkit";
 
 // const usersURL = 'http://10.0.2.2:5000/api/users'
-// const usersURL = 'postgres://app_projects_pwg7_user:hRj4dlsdow91x6AHZGf47wmSY5v3vT3i@dpg-cjh88ps1ja0c73bbbbeg-a.ohio-postgres.render.com/app_projects_pwg7';
+const loginUsersURL = 'https://ivy-ims.onrender.com/api/auth/login'
 const usersURL = 'https://ivy-ims.onrender.com/api/users'
 
 const initialState = {
@@ -9,17 +9,29 @@ const initialState = {
   status: 'idle',
   error: null
 }
+export const login = createAsyncThunk('session/SET_USER', async () => {
+        const response = await fetch(loginUsersURL, {
+            method: 'POST',
+            headers: {"Content-Type": "application/json",},
+            body: JSON.stringify({employeeID: "Demo", password: "password"})
+        })
+        if(response.ok){
+            const data = await response.json()
+            // console.log(data, "DDAATAAAAAAAAAAAAAAAAA")
+            return data
+        }
+})
 
 export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
-        console.log("IN FETCH USER")
+      
         const response = await fetch(usersURL, {
             method: "GET",
             headers: {"Content-Type": "application/json",}
         })
-        console.log(response, "RESPONSE")
+      
         if(response.ok) {
             const data = await response.json()
-            console.log(data, 'DATA')
+          
             return data
       }   
 })
@@ -27,11 +39,20 @@ export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
 const usersSlice = createSlice({
     name: 'users',
     initialState,
-    reducers: {}, 
+    reducers: {
+        userAdded(state, action) {
+            state.users.push(action.payload)
+        }
+    }, 
     extraReducers(builder) {
         builder
-            .addCase(fetchUsers.fulfilled, (state, action)=> {
-                return action.payload
+            .addCase(login.fulfilled, (state, action)=> {
+                // console.log(action.payload, 'PAYLOOOOOOOOOD')
+                state.users = state.users.concat(action.payload)
+            })
+            .addCase(login.rejected, (state, action) => {
+                state.status = 'failed'
+                state.error = action.error.message
             })
          
     }
@@ -41,6 +62,6 @@ export const selectAllUsers = (state) => state.users.users;
 export const getUsersStatus = (state) => state.users.status;
 export const getUsersError = (state) => state.users.error;
 
-// export const { userAdded } = usersSlice.actions
+export const { userAdded } = usersSlice.actions
 
 export default usersSlice.reducer
