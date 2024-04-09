@@ -9,16 +9,16 @@ function AddUserForm({navigation}) {
     const [name, setName] = useState('')
     const [age, setAge] = useState('')
 
-    const handleSubmit = () => {
-        if(name && age){
-          dispatch(userAdded(name, age))
-          setName('')
-          setAge('')
-          navigation.navigate("Home")
-        } else {
-          Alert.alert('Error', 'Please fill out the form')
-        }
-    }
+    // const handleSubmit = () => {
+    //     if(name && age){
+    //       dispatch(userAdded(name, age))
+    //       setName('')
+    //       setAge('')
+    //       navigation.navigate("Home")
+    //     } else {
+    //       Alert.alert('Error', 'Please fill out the form')
+    //     }
+    // }
   
     return (
       <View>
@@ -37,7 +37,7 @@ function AddUserForm({navigation}) {
         <Button
             color='red' 
             title='Submit'
-            onPress={handleSubmit}
+            // onPress={handleSubmit}
             />
         </View>
         </View>

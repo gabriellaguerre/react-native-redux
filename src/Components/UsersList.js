@@ -14,7 +14,7 @@ const UsersList = () => {
         dispatch(fetchUsers())
     }, [status, dispatch])
 
-   
+   console.log(users, "USERS")
   return (
     <View>
       {users.map(user => (
