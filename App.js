@@ -5,6 +5,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Home from './src/Components/Home';
 import AddUserForm from './src/Components/AddUserForm';
+import { fetchUsers } from './src/Redux/usersSlice';
+
+store.dispatch(fetchUsers())
 
 const Stack = createStackNavigator()
 

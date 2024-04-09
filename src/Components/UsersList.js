@@ -5,14 +5,14 @@ import { selectAllUsers, getUsersStatus, getUsersError, fetchUsers } from "../Re
 import { useEffect } from "react";
 
 const UsersList = () => {
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
     const users = useSelector(selectAllUsers)
-    const status = useSelector(getUsersStatus)
-    const error = useSelector(getUsersError)
+    // const status = useSelector(getUsersStatus)
+    // const error = useSelector(getUsersError)
 
-    useEffect(()=>{
-        dispatch(fetchUsers())
-    }, [status, dispatch])
+    // useEffect(()=>{
+    //     dispatch(fetchUsers())
+    // }, [status, dispatch])
 
    
   return (
