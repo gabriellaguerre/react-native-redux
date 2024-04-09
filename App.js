@@ -3,7 +3,7 @@ import { store } from './src/Redux/store';
 import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Home from './src/Components/Home';
+import Home from './src/Components/Login';
 import AddUserForm from './src/Components/AddUserForm';
 
 const Stack = createStackNavigator()
