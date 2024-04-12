@@ -10,22 +10,21 @@ const initialState = {
   error: null
 }
 export const login = createAsyncThunk('session/SET_USER', async ({employeeID, password}) => {
+   
         const response = await fetch(loginUsersURL, {
-            method: 'POST',
-            headers: {"Content-Type": "application/json",},
-            body: JSON.stringify({employeeID, password})
+        method: 'POST',
+        headers: {"Content-Type": "application/json",},
+        body: JSON.stringify({employeeID, password})
         })
-       
         if(response.ok){
             const data = await response.json()
-            console.log(data,'dddddddddddddd')
-            return data
-         } 
-        //  else {
-        //     const errorData = await response.json()
-        //     throw new Error(errorData.message || 'Login failed. Please check your credentials.');
-        // }
+            return data  
+         }  else {
+            throw new Error('Login failed. Please check your credentials.');
+         }
+          
 })
+       
 
 export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
       
@@ -36,7 +35,6 @@ export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
       
         if(response.ok) {
             const data = await response.json()
-          
             return data
       }   
 })
@@ -55,7 +53,7 @@ const usersSlice = createSlice({
     extraReducers(builder) {
         builder
             .addCase(login.fulfilled, (state, action)=> {
-                state.users = state.users.concat(action.payload)
+                state.users = action.payload
                 state.status = 'succeeded';
                 state.error = null;
                 

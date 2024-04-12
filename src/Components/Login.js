@@ -12,36 +12,33 @@ function Login({navigation}) {
   const [employeeID, setEmployeeID] = useState('')
   const [password, setPassword] = useState('')
 
-  console.log(error, 'eeeeeeeeeee')
-
-  // useEffect(()=> {
-
-  // },[status, employeeID, password])
-
-  
-  
- 
-
   const handleSubmit = async () => {
   
     if(!employeeID || !password) {
       Alert.alert('Warning', 'Fields cannot be empty')
     } else {
-   
-      const result = await dispatch(login({employeeID, password}))
-      console.log(result, result.meta.payload, status, 'rrrrrrrrrrrrrrrrr')
-      if(result.meta.payload !== undefined) {
-        navigation.navigate('UsersList')
-        setEmployeeID('')
-        setPassword('')
-      } else {
-            Alert.alert('Error', error || 'Login failed')
-          }
-     
+      try {
+        const result = await dispatch(login({employeeID, password}))
+        // console.log(result.meta.requestStatus, 'oooooooooooooooooooo')
+        
+        if(result.meta.requestStatus === 'fulfilled'){
+          navigation.navigate('UsersList')
+          setEmployeeID('')
+          setPassword('')
+        } else {
+          Alert.alert('Error', result.error.message);
+        }
+        
+      } catch (error) {
+        console.error('Login error:', error);
+        Alert.alert('Error', 'Login failed. Please try again later.');
+      }
+    
     }
     
   }
-  
+
+   
     return (
     
       <View style={styles.main}>
