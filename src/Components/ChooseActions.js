@@ -4,18 +4,11 @@ import { ScrollView, View, Text } from "react-native";
 import { selectAllUsers, getUsersStatus, getUsersError, fetchUsers, login } from "../Redux/usersSlice";
 import { useEffect } from "react";
 
-const UsersList = () => {
+const ChooseActions = () => {
     const dispatch = useDispatch()
-    const users = useSelector(selectAllUsers)
+    const user = useSelector(selectAllUsers)
   
-    const status = useSelector(getUsersStatus)
-    const error = useSelector(getUsersError)
-
-    useEffect(()=>{
-        dispatch(login())
-    }, [status, dispatch])
-
-   
+ 
   return (
     <View>
       <Text>Hello User</Text>
@@ -24,4 +17,4 @@ const UsersList = () => {
   )
 }
 
-export default UsersList;
+export default ChooseActions;
