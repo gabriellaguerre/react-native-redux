@@ -18,11 +18,7 @@ const UsersList = () => {
    
   return (
     <View>
-      {users.map(user => (
-        <View key={user.id}>
-            <Text >{user.employeeID} is {user.accessLevel}</Text>
-        </View>
-    ))}
+      <Text>Hello User</Text>
    
     </View>
   )

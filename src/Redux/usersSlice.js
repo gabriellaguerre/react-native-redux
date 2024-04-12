@@ -9,18 +9,22 @@ const initialState = {
   status: 'idle',
   error: null
 }
-export const login = createAsyncThunk('session/SET_USER', async () => {
+export const login = createAsyncThunk('session/SET_USER', async ({employeeID, password}) => {
+   
         const response = await fetch(loginUsersURL, {
-            method: 'POST',
-            headers: {"Content-Type": "application/json",},
-            body: JSON.stringify({employeeID: "Demo", password: "password"})
+        method: 'POST',
+        headers: {"Content-Type": "application/json",},
+        body: JSON.stringify({employeeID, password})
         })
         if(response.ok){
             const data = await response.json()
-            // console.log(data, "DDAATAAAAAAAAAAAAAAAAA")
-            return data
-        }
+            return data  
+         }  else {
+            throw new Error('Login failed. Please check your credentials.');
+         }
+          
 })
+       
 
 export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
       
@@ -31,7 +35,6 @@ export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
       
         if(response.ok) {
             const data = await response.json()
-          
             return data
       }   
 })
@@ -42,17 +45,22 @@ const usersSlice = createSlice({
     reducers: {
         userAdded(state, action) {
             state.users.push(action.payload)
+        },
+        clearError(state){
+            state.error = null;
         }
     }, 
     extraReducers(builder) {
         builder
             .addCase(login.fulfilled, (state, action)=> {
-                // console.log(action.payload, 'PAYLOOOOOOOOOD')
-                state.users = state.users.concat(action.payload)
+                state.users = action.payload
+                state.status = 'succeeded';
+                state.error = null;
+                
             })
             .addCase(login.rejected, (state, action) => {
                 state.status = 'failed'
-                state.error = action.error.message
+                state.error = action.error.message || 'Login failed. Please try again.'
             })
          
     }
