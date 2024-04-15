@@ -14,12 +14,12 @@ function App() {
         <Stack.Screen 
           name='Login'
           component={Login}
-          // options={{title:'Welcome To All Users'}}
+          options={{ headerShown: false }}
           />
         <Stack.Screen 
           name='ChooseActions'
           component={ChooseActions}
-          // options={{title: 'Add New User'}}
+          options={{ headerShown: false }}
           />
       </Stack.Navigator>
     </NavigationContainer>

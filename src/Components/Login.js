@@ -12,6 +12,17 @@ function Login({navigation}) {
   const [employeeID, setEmployeeID] = useState('')
   const [password, setPassword] = useState('')
 
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      // Reset input fields when component comes into focus
+      setEmployeeID('');
+      setPassword('');
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   const handleSubmit = async () => {
   
     if(!employeeID || !password) {
@@ -19,12 +30,13 @@ function Login({navigation}) {
     } else {
       try {
         const result = await dispatch(login({employeeID, password}))
-        // console.log(result.meta.requestStatus, 'oooooooooooooooooooo')
+        console.log(result, 'oooooooooooooooooooo')
         
         if(result.meta.requestStatus === 'fulfilled'){
-          navigation.navigate('UsersList')
           setEmployeeID('')
           setPassword('')
+          navigation.navigate('ChooseActions')
+          
         } else {
           Alert.alert('Error', result.error.message);
         }
@@ -40,7 +52,7 @@ function Login({navigation}) {
 
    
     return (
-    
+     <>
       <View style={styles.main}>
         <Image 
             style={styles.logo}
@@ -62,9 +74,12 @@ function Login({navigation}) {
             color= 'green'
             onPress={()=>handleSubmit()}
             />
-         <Text style={styles.opogyText}>powered by Opogy </Text>
+        
       </View>
-   
+      <View style={styles.opogyView}> 
+      <Text style={styles.opogyText}>powered by Opogy </Text>
+      </View>
+      </>
     )
  
 }
@@ -94,7 +109,12 @@ const styles = StyleSheet.create({
   logo: {
     margin: 30,
   },
+  opogyView: {
+    alignItems: 'center',
+    backgroundColor: 'rgb(0, 0, 73)'
+  },
   opogyText: {
+    margin: 10,
     color: 'red',
     fontSize: 10,
   }
