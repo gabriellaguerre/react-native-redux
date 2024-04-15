@@ -9,8 +9,6 @@ const ChooseActions = ({navigation}) => {
     const dispatch = useDispatch()
     const user = useSelector(selectAllUsers)
   
-    
-  
     const handleLogout = () => {
       dispatch(logoutUser());
       navigation.reset({
