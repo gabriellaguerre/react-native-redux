@@ -2,7 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Login from './src/Components/Login';
-import UsersList from './src/Components/UsersList';
+import ChooseActions from './src/Components/ChooseActions';
 
 const Stack = createStackNavigator()
 
@@ -14,12 +14,12 @@ function App() {
         <Stack.Screen 
           name='Login'
           component={Login}
-          // options={{title:'Welcome To All Users'}}
+          options={{ headerShown: false }}
           />
         <Stack.Screen 
-          name='UsersList'
-          component={UsersList}
-          // options={{title: 'Add New User'}}
+          name='ChooseActions'
+          component={ChooseActions}
+          options={{ headerShown: false }}
           />
       </Stack.Navigator>
     </NavigationContainer>

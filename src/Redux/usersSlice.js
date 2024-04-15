@@ -2,6 +2,7 @@ import { createSlice, nanoid, createAsyncThunk } from "@reduxjs/toolkit";
 
 // const usersURL = 'http://10.0.2.2:5000/api/users'
 const loginUsersURL = 'https://ivy-ims.onrender.com/api/auth/login'
+const logoutUserUrl = 'https://ivy-ims.onrender.com/api/auth/logout'
 const usersURL = 'https://ivy-ims.onrender.com/api/users'
 
 const initialState = {
@@ -27,7 +28,6 @@ export const login = createAsyncThunk('session/SET_USER', async ({employeeID, pa
        
 
 export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
-      
         const response = await fetch(usersURL, {
             method: "GET",
             headers: {"Content-Type": "application/json",}
@@ -38,6 +38,16 @@ export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
             return data
       }   
 })
+
+export const logoutUser = createAsyncThunk('users/logoutUser', async () => {
+    const response = await fetch(logoutUserUrl, {
+        headers: {"Content-Type": "application/json"}
+    })
+    if(response.ok){
+        return { users: null }
+    }
+})
+
 
 const usersSlice = createSlice({
     name: 'users',
