@@ -6,14 +6,14 @@ const getAllItemsURL = 'https://ivy-ims.onrender.com/api/'
 // const usersURL = 'https://ivy-ims.onrender.com/api/'
 
 const initialState = {
-  pos: [],
+  items: [],
   status: 'idle',
   error: null
 }
 
 
-const posSlice = createSlice({
-    name: 'pos',
+const itemsSlice = createSlice({
+    name: 'items',
     initialState,
     reducers: { }
 })
@@ -24,4 +24,4 @@ const posSlice = createSlice({
 
 // export const { userAdded } = usersSlice.actions
 
-export default posSlice.reducer
+export default itemsSlice.reducer
