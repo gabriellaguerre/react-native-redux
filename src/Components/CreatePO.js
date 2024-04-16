@@ -1,17 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Button, StyleSheet, Text, TextInput, View, Alert } from 'react-native'
+import { SelectList } from 'react-native-dropdown-select-list'
+import { selectAllItems, fetchItems } from '../Redux/itemsSlice'
 
 
 
 function CreatePO({navigation}) {
   const dispatch = useDispatch();
- 
+  const itemList = useSelector(selectAllItems)
+
+
+  console.log(itemList.items, 'oooooooooooooo')
+  const newList = Object.values(itemList.items)
+
+  console.log(newList, 'llllllllllllllllllllllllllllll')
   const canvasRef = useRef(null);
   const formData = new FormData();
 
   useEffect(() => {
-      dispatch(ItemsActions.getAllItems())
+      dispatch(fetchItems())
   }, [dispatch])
 
 
@@ -25,11 +33,13 @@ function CreatePO({navigation}) {
   const [isDrawing, setIsDrawing] = useState(false);
   const [signed, setSigned] = useState(false);
   const [disabled, setDisabled] = useState(false)
+  const [selected, setSelected] = useState('')
 
-  const itemList = useSelector(state => Object.values(state.items))
+  
   const thisItem1 = useSelector(state => state.items[itemId1])
   const thisItem2 = useSelector(state => state.items[itemId2])
   const thisItem3 = useSelector(state => state.items[itemId3])
+  console.log(selected, 'sssssssssssssssssssssssssssssssss')
 
   let updatedItemList = []
 
@@ -204,7 +214,13 @@ function CreatePO({navigation}) {
     return (
       <View>
         <Text style={styles.header}>Create Purchase Order</Text>
-        
+        <SelectList
+             setSelected={(val) => setSelected(val)} 
+             data={newList.map(item => ({ label: item.code, value: item.id }))} // Assuming SelectList requires label and value properties
+             save="code"
+            />
+        <TextInput />
+        <TextInput />
         </View>
     )
 }
