@@ -7,20 +7,28 @@ import { selectAllItems, fetchItems } from '../Redux/itemsSlice'
 
 
 function CreatePO({navigation}) {
-  const dispatch = useDispatch();
+//   const dispatch = useDispatch();
   const itemList = useSelector(selectAllItems)
+
+//   useEffect(() => {
+//     dispatch(fetchItems())
+// }, [dispatch])
+
+
+  
 
 
   console.log(itemList.items, 'oooooooooooooo')
-  const newList = Object.values(itemList.items)
-
-  console.log(newList, 'llllllllllllllllllllllllllllll')
+  const newList = itemList.items
+  console.log(newList, 'nnnnnnnnnnn')
+  const otherList =  newList.map(item => ({ key: item.id.toString(), value: item.code.toString() }))
+  console.log(otherList, 'tttttttttttt')
+//   console.log(newList, 'llllllllllllllllllllllllllllll')
+//   console.log(otherList, 'ppppppppppppppp')
   const canvasRef = useRef(null);
   const formData = new FormData();
 
-  useEffect(() => {
-      dispatch(fetchItems())
-  }, [dispatch])
+
 
 
   const [itemId1, setItemCode1] = useState('')
@@ -41,119 +49,119 @@ function CreatePO({navigation}) {
   const thisItem3 = useSelector(state => state.items[itemId3])
   console.log(selected, 'sssssssssssssssssssssssssssssssss')
 
-  let updatedItemList = []
+//   let updatedItemList = []
 
-  for (let i = 0; i < itemList.length - 1; i++) {
-      let item = itemList[i]
-      updatedItemList.push(item)
-  }
-
-
-  useEffect(() => {
-
-      if (itemId1.length === 0 && itemId2.length === 0 && itemId3.length === 0) {
-          setDisabled(true)
-
-      } else if (itemId1.length > 0 && quantity1.length === 0 && itemId2.length === 0 && itemId3.length === 0) {
-          setDisabled(true)
-
-      } else if (itemId1.length > 0 && quantity1.length > 0 && +quantity1 && itemId2.length === 0 && itemId3.length === 0 && quantity2.length === 0 && quantity3.length === 0) {
-          setDisabled(false)
-          setErrors([])
-
-      } else if (itemId1.length > 0 && quantity1.length > 0 && !+quantity1 && itemId2.length === 0 && itemId3.length === 0 && quantity2.length === 0 && quantity3.length === 0) {
-          setDisabled(true)
-          let errors = ['Enter a valid Quantity']
-          setErrors(errors)
-
-      } else if (itemId1.length > 0 && quantity1.length > 0 && itemId2.length > 0 && quantity2.length === 0 && itemId3.length === 0 && quantity3.length === 0 && itemId1 === itemId2) {
-          setDisabled(true)
-          let errors = ['*2 Items have the same Item Code']
-          setErrors(errors)
-
-      } else if (itemId1.length > 0 && quantity1.length > 0 && itemId2.length > 0 && quantity2.length === 0 && itemId3.length === 0 && quantity3.length === 0 && itemId1 !== itemId2) {
-          setDisabled(true)
-          setErrors([])
-
-      } else if (itemId1.length > 0 && quantity1.length > 0 && +quantity1 && itemId2.length > 0 && quantity2.length > 0 && +quantity2 && itemId1 !== itemId2 && itemId3.length === 0 && quantity3.length === 0) {
-          setDisabled(false)
-          setErrors([])
-
-      } else if (itemId1.length > 0 && quantity1.length > 0 && +quantity1 && itemId2.length > 0 && quantity2.length > 0 && !+quantity2 && itemId1 !== itemId2 && itemId3.length === 0 && quantity3.length === 0) {
-          setDisabled(true)
-          let errors = ['Enter a valid Quantity']
-          setErrors(errors)
-
-      } else if (itemId1.length > 0 && quantity1.length > 0 && +quantity1 && itemId2.length > 0 && quantity2.length > 0 && +quantity2 && itemId1 === itemId2 && itemId3.length === 0 && quantity3.length === 0) {
-          setDisabled(true)
-          let errors = ['*2 Items have the same Item Code']
-          setErrors(errors)
-
-      } else if ((itemId1.length > 0 && quantity1.length > 0) && (itemId2.length > 0 && quantity2.length > 0) && (itemId3.length > 0 && quantity3.length === 0)
-          && (itemId1 === itemId3 || itemId2 === itemId3)) {
-          setDisabled(true)
-          let errors = ['*2 Items have the same Item Code']
-          setErrors(errors)
-
-      } else if (itemId1.length > 0 && quantity1.length > 0 && itemId2.length > 0 && quantity2.length > 0 && itemId3.length > 0 && quantity3.length === 0) {
-          setDisabled(true)
-          setErrors([])
-
-      } else if ((!+quantity1 && quantity1.length > 0) || (!+quantity2 && quantity2.length > 0) || (!+quantity3 && quantity3.length > 0)) {
-          let errors = ['*Enter a valid Quantity']
-          setDisabled(true)
-          setErrors(errors)
-
-      } else {
-          setDisabled(false)
-          setErrors([])
-      }
-
-  }, [itemId2, itemId3, itemId1, quantity1, quantity2, quantity3, thisItem1, thisItem2, thisItem3, disabled, signed])
-
-  const createPurchaseOrder = async () => {
-
-      const poResponse = await dispatch(POsActions.createPurchaseOrder(formData));
-
-      if (poResponse) {
-          const itemsToCreate = [
-              { itemId: itemId1, quantity: quantity1 },
-              { itemId: itemId2, quantity: quantity2 },
-              { itemId: itemId3, quantity: quantity3 },
-          ];
-
-          for (const { itemId, quantity } of itemsToCreate) {
-              if (itemId && +quantity) {
-                  await dispatch(PurchaseOrderItemsActions.createPOItem(itemId, { quantity }));
-              }
-          }
-          await dispatch(POsActions.resetState())
-          .then(await dispatch(POsActions.getPOSByPage(0)))
-          .then(()=> {if(updatePage) updatePage(0)})
-          .then(history.push('/purchase_orders'))
-          .then(closeModal())
-
-      } else {
-          setErrors(['Error processing your purchase order'])
-      }
-  }
-
-  const onSubmit = async (e) => {
-      e.preventDefault()
-
-      if (signed) {
-          const canvas = canvasRef.current;
-          let signatureDataURL = canvas.toDataURL('image/png');
-          const parts = signatureDataURL.split(",");
-          const base64Content = parts[1];
-          formData.append('image', base64Content)
-
-          await createPurchaseOrder()
+//   for (let i = 0; i < itemList.length - 1; i++) {
+//       let item = itemList[i]
+//       updatedItemList.push(item)
+//   }
 
 
-      }
+//   useEffect(() => {
 
-  }
+//       if (itemId1.length === 0 && itemId2.length === 0 && itemId3.length === 0) {
+//           setDisabled(true)
+
+//       } else if (itemId1.length > 0 && quantity1.length === 0 && itemId2.length === 0 && itemId3.length === 0) {
+//           setDisabled(true)
+
+//       } else if (itemId1.length > 0 && quantity1.length > 0 && +quantity1 && itemId2.length === 0 && itemId3.length === 0 && quantity2.length === 0 && quantity3.length === 0) {
+//           setDisabled(false)
+//           setErrors([])
+
+//       } else if (itemId1.length > 0 && quantity1.length > 0 && !+quantity1 && itemId2.length === 0 && itemId3.length === 0 && quantity2.length === 0 && quantity3.length === 0) {
+//           setDisabled(true)
+//           let errors = ['Enter a valid Quantity']
+//           setErrors(errors)
+
+//       } else if (itemId1.length > 0 && quantity1.length > 0 && itemId2.length > 0 && quantity2.length === 0 && itemId3.length === 0 && quantity3.length === 0 && itemId1 === itemId2) {
+//           setDisabled(true)
+//           let errors = ['*2 Items have the same Item Code']
+//           setErrors(errors)
+
+//       } else if (itemId1.length > 0 && quantity1.length > 0 && itemId2.length > 0 && quantity2.length === 0 && itemId3.length === 0 && quantity3.length === 0 && itemId1 !== itemId2) {
+//           setDisabled(true)
+//           setErrors([])
+
+//       } else if (itemId1.length > 0 && quantity1.length > 0 && +quantity1 && itemId2.length > 0 && quantity2.length > 0 && +quantity2 && itemId1 !== itemId2 && itemId3.length === 0 && quantity3.length === 0) {
+//           setDisabled(false)
+//           setErrors([])
+
+//       } else if (itemId1.length > 0 && quantity1.length > 0 && +quantity1 && itemId2.length > 0 && quantity2.length > 0 && !+quantity2 && itemId1 !== itemId2 && itemId3.length === 0 && quantity3.length === 0) {
+//           setDisabled(true)
+//           let errors = ['Enter a valid Quantity']
+//           setErrors(errors)
+
+//       } else if (itemId1.length > 0 && quantity1.length > 0 && +quantity1 && itemId2.length > 0 && quantity2.length > 0 && +quantity2 && itemId1 === itemId2 && itemId3.length === 0 && quantity3.length === 0) {
+//           setDisabled(true)
+//           let errors = ['*2 Items have the same Item Code']
+//           setErrors(errors)
+
+//       } else if ((itemId1.length > 0 && quantity1.length > 0) && (itemId2.length > 0 && quantity2.length > 0) && (itemId3.length > 0 && quantity3.length === 0)
+//           && (itemId1 === itemId3 || itemId2 === itemId3)) {
+//           setDisabled(true)
+//           let errors = ['*2 Items have the same Item Code']
+//           setErrors(errors)
+
+//       } else if (itemId1.length > 0 && quantity1.length > 0 && itemId2.length > 0 && quantity2.length > 0 && itemId3.length > 0 && quantity3.length === 0) {
+//           setDisabled(true)
+//           setErrors([])
+
+//       } else if ((!+quantity1 && quantity1.length > 0) || (!+quantity2 && quantity2.length > 0) || (!+quantity3 && quantity3.length > 0)) {
+//           let errors = ['*Enter a valid Quantity']
+//           setDisabled(true)
+//           setErrors(errors)
+
+//       } else {
+//           setDisabled(false)
+//           setErrors([])
+//       }
+
+//   }, [itemId2, itemId3, itemId1, quantity1, quantity2, quantity3, thisItem1, thisItem2, thisItem3, disabled, signed])
+
+//   const createPurchaseOrder = async () => {
+
+//       const poResponse = await dispatch(POsActions.createPurchaseOrder(formData));
+
+//       if (poResponse) {
+//           const itemsToCreate = [
+//               { itemId: itemId1, quantity: quantity1 },
+//               { itemId: itemId2, quantity: quantity2 },
+//               { itemId: itemId3, quantity: quantity3 },
+//           ];
+
+//           for (const { itemId, quantity } of itemsToCreate) {
+//               if (itemId && +quantity) {
+//                   await dispatch(PurchaseOrderItemsActions.createPOItem(itemId, { quantity }));
+//               }
+//           }
+//           await dispatch(POsActions.resetState())
+//           .then(await dispatch(POsActions.getPOSByPage(0)))
+//           .then(()=> {if(updatePage) updatePage(0)})
+//           .then(history.push('/purchase_orders'))
+//           .then(closeModal())
+
+//       } else {
+//           setErrors(['Error processing your purchase order'])
+//       }
+//   }
+
+//   const onSubmit = async (e) => {
+//       e.preventDefault()
+
+//       if (signed) {
+//           const canvas = canvasRef.current;
+//           let signatureDataURL = canvas.toDataURL('image/png');
+//           const parts = signatureDataURL.split(",");
+//           const base64Content = parts[1];
+//           formData.append('image', base64Content)
+
+//           await createPurchaseOrder()
+
+
+//       }
+
+//   }
 
 
   const startDrawing = (e) => {
@@ -203,21 +211,22 @@ function CreatePO({navigation}) {
       setSigned(false)
   };
 
-  const handleCancel = async ()=> {
-      await dispatch(ItemsActions.resetState())
-      .then(dispatch(ItemsActions.getItemsByPage(0)))
-      .then(closeModal())
-  }
+//   const handleCancel = async ()=> {
+//       await dispatch(ItemsActions.resetState())
+//       .then(dispatch(ItemsActions.getItemsByPage(0)))
+//       .then(closeModal())
+//   }
 
     
   
     return (
-      <View>
+      <View style={styles.dropDown}>
         <Text style={styles.header}>Create Purchase Order</Text>
-        <SelectList
+        <SelectList style={styles.selectList}
              setSelected={(val) => setSelected(val)} 
-             data={newList.map(item => ({ label: item.code, value: item.id }))} // Assuming SelectList requires label and value properties
-             save="code"
+             data={otherList} // Assuming SelectList requires label and value properties
+             placeholder='Select Item Code'
+             save='value'
             />
         <TextInput />
         <TextInput />
@@ -231,6 +240,7 @@ const styles = StyleSheet.create({
     color: 'blue',
     fontWeight: 'bold',
     marginTop: 15,
+    marginBottom: 15,
   },
   input: {
     backgroundColor: 'white',
@@ -241,7 +251,14 @@ const styles = StyleSheet.create({
     alignSelf:'center',
     margin: 10,
     backgroundColor: 'green'
-  }
+  },
+  dropDown: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+//   selectList: {
+//     marginTop: 60,
+//   },
 })
 
 export default CreatePO

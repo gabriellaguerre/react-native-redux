@@ -1,13 +1,18 @@
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from "react-redux";
-import React from 'react'
 import { ScrollView, View, Text, StyleSheet, Button, TouchableOpacity } from "react-native";
+import { selectAllItems, fetchItems } from '../Redux/itemsSlice'
 import { selectAllUsers, logoutUser } from "../Redux/usersSlice";
-import { useEffect } from "react";
+
 
 const ChooseActions = ({navigation}) => {
     
     const dispatch = useDispatch()
     const user = useSelector(selectAllUsers)
+
+    useEffect(() => {
+      dispatch(fetchItems())
+  }, [dispatch])
   
     const handleLogout = () => {
       dispatch(logoutUser());
