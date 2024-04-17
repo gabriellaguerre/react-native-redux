@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View, StyleSheet, Button, TextInput, Image, Alert} from 'react-native'
-// import UsersList from './UsersList'
-import { login, getUsersStatus, getUsersError } from '../Redux/usersSlice'
-import { useDispatch, useSelector } from 'react-redux'
+import { Text, View, StyleSheet, TextInput, Image, Alert, TouchableOpacity} from 'react-native'
+import { login } from '../Redux/usersSlice'
+import { useDispatch } from 'react-redux'
 
 function Login({navigation}) {
   const dispatch = useDispatch()
-  const status = useSelector(getUsersStatus)
-  const error = useSelector(getUsersError)
+ 
 
   const [employeeID, setEmployeeID] = useState('')
   const [password, setPassword] = useState('')
@@ -30,7 +28,7 @@ function Login({navigation}) {
     } else {
       try {
         const result = await dispatch(login({employeeID, password}))
-        console.log(result, 'oooooooooooooooooooo')
+        // console.log(result, 'oooooooooooooooooooo')
         
         if(result.meta.requestStatus === 'fulfilled'){
           setEmployeeID('')
@@ -59,21 +57,19 @@ function Login({navigation}) {
             source={require('../Assets/ivy_image.png')}/> 
         <Text style={styles.ivyText}>Welcome to Ivy </Text>
        
-      
         <TextInput 
             style={styles.input}
-            placeholder='employeeID'
+            placeholder='enter your employeeID'
             onChangeText={(value)=> setEmployeeID(value)}
             />
          <TextInput 
             style={styles.input}
-            placeholder='password'
+            placeholder='enter your password'
+            secureTextEntry={true}
             onChangeText={(value)=> setPassword(value)}/>
-        <Button 
-            title='Login'
-            color= 'green'
-            onPress={()=>handleSubmit()}
-            />
+        <TouchableOpacity style={styles.loginButton} onPress={()=>handleSubmit()}>
+            <Text style={styles.loginText}>Login</Text>
+         </TouchableOpacity> 
         
       </View>
       <View style={styles.opogyView}> 
@@ -97,13 +93,13 @@ const styles = StyleSheet.create({
       borderColor: 'white',
       borderRadius: 10,
       backgroundColor: 'white',
-      textAlign: 'center',
       fontSize: 20,
       marginBottom: 10,
+      paddingLeft: 10,
   },
   ivyText: {
     color: 'white',
-    margin: 10,
+    margin: 15,
     fontSize: 20,
   },
   logo: {
@@ -115,9 +111,21 @@ const styles = StyleSheet.create({
   },
   opogyText: {
     margin: 10,
-    color: 'red',
+    color: 'white',
     fontSize: 10,
-  }
+    fontWeight: 'bold',
+  },
+  loginButton: {
+    margin: 20,
+    backgroundColor: 'rgb(137, 206, 206)', 
+    borderRadius: 20,
+  },
+  loginText: {
+    fontSize: 20,
+    color: 'rgb(0, 0, 73)',
+    margin: 20,
+    fontWeight: 'bold',
+  },
 
   })
 
