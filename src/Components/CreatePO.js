@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, StyleSheet, Text, TextInput, View, Alert } from 'react-native'
+import { Button, StyleSheet, Text, TextInput, View, Alert, TouchableOpacity } from 'react-native'
 import { SelectList } from 'react-native-dropdown-select-list'
 import { selectAllItems, fetchItems } from '../Redux/itemsSlice'
+import { panHandlerName } from 'react-native-gesture-handler/lib/typescript/handlers/PanGestureHandler'
 
 
 
@@ -44,10 +45,10 @@ function CreatePO({navigation}) {
   const [selected, setSelected] = useState('')
 
   
-  const thisItem1 = useSelector(state => state.items[itemId1])
+  const thisItem1 = newList.filter(item => item.code === Number(itemId1))
   const thisItem2 = useSelector(state => state.items[itemId2])
   const thisItem3 = useSelector(state => state.items[itemId3])
-  console.log(selected, 'sssssssssssssssssssssssssssssssss')
+  console.log(thisItem1, 'sssssssssssssssssssssssssssssssss')
 
 //   let updatedItemList = []
 
@@ -217,19 +218,36 @@ function CreatePO({navigation}) {
 //       .then(closeModal())
 //   }
 
-    
+    const handleSubmit = () => {
+
+    }
   
     return (
       <View style={styles.dropDown}>
         <Text style={styles.header}>Create Purchase Order</Text>
+        <Text style={styles.itemCode}>Item Code:</Text>
         <SelectList style={styles.selectList}
-             setSelected={(val) => setSelected(val)} 
+             setSelected={(val) => setItemCode1(val)} 
              data={otherList} // Assuming SelectList requires label and value properties
              placeholder='Select Item Code'
              save='value'
             />
-        <TextInput />
-        <TextInput />
+        <Text style={styles.descriptionTitle}>Description:</Text>
+        <Text style={styles.description}>{thisItem1[0]?.description}</Text>
+        <View style={styles.quantityBlock}>
+        <Text style={styles.quantity}>Quantity needed:</Text>
+        <TextInput 
+             style={styles.quantityInput}
+             placeholder='qty'
+             value={quantity1}
+             onChangeText={(value)=>setQuantity1(value)}
+             />
+        </View>
+        <View style={styles.buttonView}>
+        <TouchableOpacity style={styles.submitButton}  onPress={handleSubmit()}>
+        <Text style={styles.submit}>Submit</Text>
+        </TouchableOpacity>
+        </View>
         </View>
     )
 }
@@ -256,9 +274,50 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
   },
-//   selectList: {
-//     marginTop: 60,
-//   },
+  itemCode: {
+    fontWeight: 'bold'
+  },
+  descriptionTitle: {
+    fontWeight: 'bold',
+    marginTop: 10,
+  },
+  quantity: {
+    fontWeight: 'bold',
+    marginTop: 10,
+   
+  },
+  quantityInput: {
+    backgroundColor: 'white',
+    borderRadius: 5,  
+    width: 40,
+    textAlign: 'center',  
+    marginLeft: 10,
+  },
+  quantityBlock: {
+    flexDirection: 'row',
+    
+  },
+  submit: {
+    fontSize: 20,
+    color: 'white',
+    // fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  submitButton: {
+    backgroundColor: 'blue',
+    // width: 100,
+    height: 50,
+    // margin: 50,
+    borderRadius: 20,
+    justifyContent: 'center',
+  },
+  buttonView: {
+    textAlign: 'center',
+    justifyContent: 'center',
+    width: '30%',
+    alignSelf: 'center',
+    marginTop: 50,
+  }, 
 })
 
 export default CreatePO
