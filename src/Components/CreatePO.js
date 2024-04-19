@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Modal, StyleSheet, Text, TextInput, View, Alert, TouchableOpacity } from 'react-native'
+import { Modal, StyleSheet, Text, TextInput, View, Alert, TouchableOpacity, FlatList } from 'react-native'
 import { SelectList } from 'react-native-dropdown-select-list'
 import { selectAllItems, fetchItems } from '../Redux/itemsSlice'
 // import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
@@ -21,11 +21,11 @@ const [modalVisible, setModalVisible] = useState(false)
   
 
 
-  console.log(itemList.items, 'oooooooooooooo')
+  // console.log(itemList.items, 'oooooooooooooo')
   const newList = itemList.items
-  console.log(newList, 'nnnnnnnnnnn')
+  // console.log(newList, 'nnnnnnnnnnn')
   const otherList =  newList.map(item => ({ key: item.id.toString(), value: item.code.toString() }))
-  console.log(otherList, 'tttttttttttt')
+  // console.log(otherList, 'tttttttttttt')
 //   console.log(newList, 'llllllllllllllllllllllllllllll')
 //   console.log(otherList, 'ppppppppppppppp')
   const canvasRef = useRef(null);
@@ -45,12 +45,13 @@ const [modalVisible, setModalVisible] = useState(false)
   const [signed, setSigned] = useState(false);
   const [disabled, setDisabled] = useState(false)
   const [selected, setSelected] = useState('')
+  const [dataArray, setDataArray] = useState([])
 
   
   const thisItem1 = newList.filter(item => item.code === Number(itemId1))
   const thisItem2 = useSelector(state => state.items[itemId2])
   const thisItem3 = useSelector(state => state.items[itemId3])
-  console.log(thisItem1, 'sssssssssssssssssssssssssssssssss')
+  // console.log(thisItem1, 'sssssssssssssssssssssssssssssssss')
 
 //   let updatedItemList = []
 
@@ -58,8 +59,15 @@ const [modalVisible, setModalVisible] = useState(false)
 //       let item = itemList[i]
 //       updatedItemList.push(item)
 //   }
+// let dataArray = []
 
+const poModalData = (poData) => {
+  console.log(poData,'ppppppppppppppppp')
+  setDataArray(prevArray => [...prevArray, poData])
+  console.log(dataArray, 'aaaaaaaaaaaaaaa')
+}
 
+console.log(dataArray, 'aaaaaaaaaaaaaaa')
 //   useEffect(() => {
 
 //       if (itemId1.length === 0 && itemId2.length === 0 && itemId3.length === 0) {
@@ -231,38 +239,26 @@ const [modalVisible, setModalVisible] = useState(false)
           transparent={true}
           visible={modalVisible}
           onRequestClose={()=>setModalVisible(!modalVisible)}>
-          <CreatePOModal modalVisible={modalVisible} setModalVisible={setModalVisible}/>
+          <CreatePOModal modalVisible={modalVisible} setModalVisible={setModalVisible} onSubmitData={poModalData}/>
           </Modal>
         <Text style={styles.header}>Create Purchase Order</Text>
         <View>
            <TouchableOpacity onPress={()=>{setModalVisible(true)}} >
             <FontAwesome5 name={'plus'} size={40} color={'blue'}/>
         </TouchableOpacity>
-        </View>
        
-        {/* <Text style={styles.itemCode}>Item Code:</Text>
-        <SelectList style={styles.selectList}
-             setSelected={(val) => setItemCode1(val)} 
-             data={otherList} // Assuming SelectList requires label and value properties
-             placeholder='Select Item Code'
-             save='value'
-            />
-        <Text style={styles.descriptionTitle}>Description:</Text>
-        <Text style={styles.description}>{thisItem1[0]?.description}</Text>
-        <View style={styles.quantityBlock}>
-        <Text style={styles.quantity}>Quantity needed:</Text>
-        <TextInput 
-             style={styles.quantityInput}
-             placeholder='qty'
-             value={quantity1}
-             onChangeText={(value)=>setQuantity1(value)}
-             />
         </View>
-        <View style={styles.buttonView}>
-        <TouchableOpacity style={styles.submitButton}  onPress={handleSubmit()}>
-        <Text style={styles.submit}>Submit</Text>
-        </TouchableOpacity>
-        </View> */}
+        <FlatList 
+            data={dataArray}
+            renderItem={({ item }) => (
+                <View style={styles.listContainer}>
+                  <Text style={styles.code}>{item.itemCode}</Text>
+                  <Text style={styles.description}> {item.description}</Text>
+                  <Text style={styles.subtitle}>{item.quantity}</Text>               
+                </View>                
+            )}
+            keyExtractor={(item, index) => index.toString()}
+           />
         </View>
     )
 }
