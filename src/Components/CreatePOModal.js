@@ -1,15 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Modal, StyleSheet, Text, TextInput, View, Alert, TouchableOpacity } from 'react-native'
+import { Button, StyleSheet, Text, TextInput, View, Alert, TouchableOpacity } from 'react-native'
 import { SelectList } from 'react-native-dropdown-select-list'
 import { selectAllItems, fetchItems } from '../Redux/itemsSlice'
-// import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
-import CreatePOModal from './CreatePOModal'
+import { panHandlerName } from 'react-native-gesture-handler/lib/typescript/handlers/PanGestureHandler'
 
 
 
-function CreatePO({navigation}) {
+function CreatePOModal({ modalVisible, setModalVisible }) {
 //   const dispatch = useDispatch();
   const itemList = useSelector(selectAllItems)
 
@@ -17,7 +15,7 @@ function CreatePO({navigation}) {
 //     dispatch(fetchItems())
 // }, [dispatch])
 
-const [modalVisible, setModalVisible] = useState(false)
+
   
 
 
@@ -167,80 +165,67 @@ const [modalVisible, setModalVisible] = useState(false)
 //   }
 
 
-  const startDrawing = (e) => {
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext('2d');
+//   const startDrawing = (e) => {
+//       const canvas = canvasRef.current;
+//       const ctx = canvas.getContext('2d');
 
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = 'black';
+//       ctx.lineWidth = 1;
+//       ctx.strokeStyle = 'black';
 
-      const x = e.nativeEvent.offsetX || e.nativeEvent.layerX;
-      const y = e.nativeEvent.offsetY || e.nativeEvent.layerY;
+//       const x = e.nativeEvent.offsetX || e.nativeEvent.layerX;
+//       const y = e.nativeEvent.offsetY || e.nativeEvent.layerY;
 
-      ctx.beginPath();
-      ctx.moveTo(x, y);
+//       ctx.beginPath();
+//       ctx.moveTo(x, y);
 
-      ctx.arc(x, y, 1, 0, Math.PI * 2);
-      ctx.fillStyle = 'black';
-      ctx.fill();
+//       ctx.arc(x, y, 1, 0, Math.PI * 2);
+//       ctx.fillStyle = 'black';
+//       ctx.fill();
 
-      setIsDrawing(true);
-      setSigned(true)
-  };
+//       setIsDrawing(true);
+//       setSigned(true)
+//   };
 
-  const draw = (e) => {
-      if (!isDrawing) return;
+//   const draw = (e) => {
+//       if (!isDrawing) return;
 
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext('2d');
+//       const canvas = canvasRef.current;
+//       const ctx = canvas.getContext('2d');
 
-      const x = e.nativeEvent.offsetX || e.nativeEvent.layerX;
-      const y = e.nativeEvent.offsetY || e.nativeEvent.layerY;
+//       const x = e.nativeEvent.offsetX || e.nativeEvent.layerX;
+//       const y = e.nativeEvent.offsetY || e.nativeEvent.layerY;
 
-      ctx.lineTo(x, y);
-      ctx.stroke();
-  };
+//       ctx.lineTo(x, y);
+//       ctx.stroke();
+//   };
 
-  const endDrawing = () => {
-      setIsDrawing(false);
-  };
+//   const endDrawing = () => {
+//       setIsDrawing(false);
+//   };
 
-  const clearCanvas = () => {
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext('2d');
+//   const clearCanvas = () => {
+//       const canvas = canvasRef.current;
+//       const ctx = canvas.getContext('2d');
 
-      // Clear the canvas by drawing a clear rectangle over it
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      setSigned(false)
-  };
+//       // Clear the canvas by drawing a clear rectangle over it
+//       ctx.clearRect(0, 0, canvas.width, canvas.height);
+//       setSigned(false)
+//   };
 
-//   const handleCancel = async ()=> {
-//       await dispatch(ItemsActions.resetState())
-//       .then(dispatch(ItemsActions.getItemsByPage(0)))
-//       .then(closeModal())
-//   }
+// //   const handleCancel = async ()=> {
+// //       await dispatch(ItemsActions.resetState())
+// //       .then(dispatch(ItemsActions.getItemsByPage(0)))
+// //       .then(closeModal())
+// //   }
 
     const handleSubmit = () => {
-
+      setModalVisible(false)
     }
   
     return (
       <View style={styles.dropDown}>
-        <Modal 
-          animationType='slide'
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={()=>setModalVisible(!modalVisible)}>
-          <CreatePOModal modalVisible={modalVisible} setModalVisible={setModalVisible}/>
-          </Modal>
         <Text style={styles.header}>Create Purchase Order</Text>
-        <View>
-           <TouchableOpacity onPress={()=>{setModalVisible(true)}} >
-            <FontAwesome5 name={'plus'} size={40} color={'blue'}/>
-        </TouchableOpacity>
-        </View>
-       
-        {/* <Text style={styles.itemCode}>Item Code:</Text>
+        <Text style={styles.itemCode}>Item Code:</Text>
         <SelectList style={styles.selectList}
              setSelected={(val) => setItemCode1(val)} 
              data={otherList} // Assuming SelectList requires label and value properties
@@ -259,10 +244,13 @@ const [modalVisible, setModalVisible] = useState(false)
              />
         </View>
         <View style={styles.buttonView}>
-        <TouchableOpacity style={styles.submitButton}  onPress={handleSubmit()}>
+        <TouchableOpacity style={styles.submitButton}  onPress={()=> {handleSubmit();}}>
         <Text style={styles.submit}>Submit</Text>
         </TouchableOpacity>
-        </View> */}
+        <TouchableOpacity style={styles.cancelButton}  onPress={()=> {setModalVisible(false);}}>
+        <Text style={styles.submit}>Cancel</Text>
+        </TouchableOpacity>
+        </View>
         </View>
     )
 }
@@ -275,19 +263,6 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginBottom: 15,
   },
-  button: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: 'blue',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    // bottom: 55,
-    right: 10,
-    elevation: 5,
-    top: 10,
-  }, 
   input: {
     backgroundColor: 'white',
     margin: 10,
@@ -301,6 +276,7 @@ const styles = StyleSheet.create({
   dropDown: {
     paddingHorizontal: 20,
     paddingVertical: 10,
+    backgroundColor: 'yellow'
   },
   itemCode: {
     fontWeight: 'bold'
@@ -333,19 +309,30 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     backgroundColor: 'blue',
-    // width: 100,
+    width: 100,
     height: 50,
     // margin: 50,
     borderRadius: 20,
     justifyContent: 'center',
+    marginRight: 10,
   },
   buttonView: {
+    flexDirection: 'row',
     textAlign: 'center',
     justifyContent: 'center',
     width: '30%',
     alignSelf: 'center',
     marginTop: 50,
   }, 
+  cancelButton: {
+    backgroundColor: 'red',
+    width: 100,
+    height: 50,
+    // margin: 50,
+    borderRadius: 20,
+    justifyContent: 'center',
+    marginLeft: 10,
+  },
 })
 
-export default CreatePO
+export default CreatePOModal;
