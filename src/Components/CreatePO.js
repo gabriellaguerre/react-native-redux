@@ -62,12 +62,12 @@ const [modalVisible, setModalVisible] = useState(false)
 // let dataArray = []
 
 const poModalData = (poData) => {
-  console.log(poData,'ppppppppppppppppp')
+  // console.log(poData,'ppppppppppppppppp')
   setDataArray(prevArray => [...prevArray, poData])
-  console.log(dataArray, 'aaaaaaaaaaaaaaa')
+  // console.log(dataArray, 'aaaaaaaaaaaaaaa')
 }
 
-console.log(dataArray, 'aaaaaaaaaaaaaaa')
+// console.log(dataArray, 'aaaaaaaaaaaaaaa')
 //   useEffect(() => {
 
 //       if (itemId1.length === 0 && itemId2.length === 0 && itemId3.length === 0) {
@@ -242,19 +242,24 @@ console.log(dataArray, 'aaaaaaaaaaaaaaa')
           <CreatePOModal modalVisible={modalVisible} setModalVisible={setModalVisible} onSubmitData={poModalData}/>
           </Modal>
         <Text style={styles.header}>Create Purchase Order</Text>
-        <View>
-           <TouchableOpacity onPress={()=>{setModalVisible(true)}} >
-            <FontAwesome5 name={'plus'} size={40} color={'blue'}/>
+      
+        <TouchableOpacity style={styles.itemButton}onPress={()=>{setModalVisible(true)}} >
+            <Text style={styles.itemText}>Add Items</Text>
         </TouchableOpacity>
        
-        </View>
+        
         <FlatList 
             data={dataArray}
             renderItem={({ item }) => (
                 <View style={styles.listContainer}>
-                  <Text style={styles.code}>{item.itemCode}</Text>
-                  <Text style={styles.description}> {item.description}</Text>
-                  <Text style={styles.subtitle}>{item.quantity}</Text>               
+                  <View style={styles.insideContainer}>
+                  <Text style={styles.item}>Item Code:</Text>
+                  <Text style={styles.codequ}>{item.itemCode}</Text>
+                  <Text style={styles.item}>Description:</Text>
+                  <Text style={styles.codequ}>{item.description}</Text>
+                  <Text style={styles.item}>Quantity:</Text>
+                  <Text style={styles.codequ}>{item.quantity}</Text>   
+                  </View>
                 </View>                
             )}
             keyExtractor={(item, index) => index.toString()}
@@ -263,6 +268,16 @@ console.log(dataArray, 'aaaaaaaaaaaaaaa')
     )
 }
 const styles = StyleSheet.create({
+  listContainer: {
+    backgroundColor: 'white',
+    margin: 10,
+    borderRadius: 10,
+  },
+  insideContainer: {
+    // flexDirection: 'row',
+    marginLeft: 10,
+    marginRight: 5,
+  },
   header: {
     fontSize: 20,
     alignSelf: 'center',
@@ -298,7 +313,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
   },
-  itemCode: {
+  item: {
     fontWeight: 'bold'
   },
   descriptionTitle: {
@@ -342,6 +357,24 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 50,
   }, 
+  codequ: {
+    marginBottom: 5,
+  },
+  itemButton: {
+    backgroundColor: 'blue',
+    width: 100,
+    height: 50,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+
+  },
+  itemText: {
+    color: 'white',
+
+
+  },
 })
 
 export default CreatePO
