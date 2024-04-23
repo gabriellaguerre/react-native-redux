@@ -1,29 +1,32 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, StyleSheet, Text, TextInput, View, Alert, TouchableOpacity } from 'react-native'
+import { Modal, StyleSheet, Text, TextInput, View, Alert, TouchableOpacity, FlatList } from 'react-native'
 import { SelectList } from 'react-native-dropdown-select-list'
 import { selectAllItems, fetchItems } from '../Redux/itemsSlice'
-import { panHandlerName } from 'react-native-gesture-handler/lib/typescript/handlers/PanGestureHandler'
+// import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+// import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import CreatePOModal from './CreatePOModal'
 
 
 
 function CreatePO({navigation}) {
-//   const dispatch = useDispatch();
+//   const dispatch = useDisimport { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'patch();
   const itemList = useSelector(selectAllItems)
 
 //   useEffect(() => {
 //     dispatch(fetchItems())
 // }, [dispatch])
 
-
+const [modalVisible, setModalVisible] = useState(false)
   
 
 
-  console.log(itemList.items, 'oooooooooooooo')
+  // console.log(itemList.items, 'oooooooooooooo')
   const newList = itemList.items
-  console.log(newList, 'nnnnnnnnnnn')
+  // console.log(newList, 'nnnnnnnnnnn')
   const otherList =  newList.map(item => ({ key: item.id.toString(), value: item.code.toString() }))
-  console.log(otherList, 'tttttttttttt')
+  // console.log(otherList, 'tttttttttttt')
 //   console.log(newList, 'llllllllllllllllllllllllllllll')
 //   console.log(otherList, 'ppppppppppppppp')
   const canvasRef = useRef(null);
@@ -43,12 +46,14 @@ function CreatePO({navigation}) {
   const [signed, setSigned] = useState(false);
   const [disabled, setDisabled] = useState(false)
   const [selected, setSelected] = useState('')
+  const [dataArray, setDataArray] = useState([])
+  const [editItem, setEditItem] = useState({})
 
   
   const thisItem1 = newList.filter(item => item.code === Number(itemId1))
   const thisItem2 = useSelector(state => state.items[itemId2])
   const thisItem3 = useSelector(state => state.items[itemId3])
-  console.log(thisItem1, 'sssssssssssssssssssssssssssssssss')
+  // console.log(thisItem1, 'sssssssssssssssssssssssssssssssss')
 
 //   let updatedItemList = []
 
@@ -56,8 +61,15 @@ function CreatePO({navigation}) {
 //       let item = itemList[i]
 //       updatedItemList.push(item)
 //   }
+// let dataArray = []
 
+const poModalData = (poData) => {
+  // console.log(poData,'ppppppppppppppppp')
+  setDataArray(prevArray => [...prevArray, poData])
+  // console.log(dataArray, 'aaaaaaaaaaaaaaa')
+}
 
+// console.log(dataArray, 'aaaaaaaaaaaaaaa')
 //   useEffect(() => {
 
 //       if (itemId1.length === 0 && itemId2.length === 0 && itemId3.length === 0) {
@@ -218,40 +230,76 @@ function CreatePO({navigation}) {
 //       .then(closeModal())
 //   }
 
-    const handleSubmit = () => {
-
+    const handleDeleteItem = (itemId) => {
+      const itemDeleted = dataArray.filter(item => item.itemCode !== itemId)
+      setDataArray(itemDeleted)
     }
   
     return (
       <View style={styles.dropDown}>
+        <Modal 
+          animationType='slide'
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={()=>setModalVisible(!modalVisible)}>
+          <CreatePOModal modalVisible={modalVisible} setModalVisible={setModalVisible} onSubmitData={poModalData} />
+          </Modal>
         <Text style={styles.header}>Create Purchase Order</Text>
-        <Text style={styles.itemCode}>Item Code:</Text>
-        <SelectList style={styles.selectList}
-             setSelected={(val) => setItemCode1(val)} 
-             data={otherList} // Assuming SelectList requires label and value properties
-             placeholder='Select Item Code'
-             save='value'
-            />
-        <Text style={styles.descriptionTitle}>Description:</Text>
-        <Text style={styles.description}>{thisItem1[0]?.description}</Text>
-        <View style={styles.quantityBlock}>
-        <Text style={styles.quantity}>Quantity needed:</Text>
-        <TextInput 
-             style={styles.quantityInput}
-             placeholder='qty'
-             value={quantity1}
-             onChangeText={(value)=>setQuantity1(value)}
-             />
-        </View>
-        <View style={styles.buttonView}>
-        <TouchableOpacity style={styles.submitButton}  onPress={handleSubmit()}>
-        <Text style={styles.submit}>Submit</Text>
+      
+        <TouchableOpacity style={styles.itemButton}onPress={()=>{setModalVisible(true)}} >
+            <Text style={styles.itemText}>Add Items</Text>
         </TouchableOpacity>
-        </View>
+       
+        
+        <FlatList 
+            data={dataArray}
+            renderItem={({ item }) => (
+                <View style={[styles.listContainer,index === dataArray.length - 1 && styles.lastItem]}>
+                  <View style={styles.insideContainer}>
+                  <Text style={styles.item}>Item Code:</Text>
+                  <Text style={styles.codequ}>{item.itemCode}</Text>
+                  <Text style={styles.item}>Description:</Text>
+                  <Text style={styles.codequ}>{item.description}</Text>
+                  <Text style={styles.item}>Quantity:</Text>
+                  <Text style={styles.codequ}>{item.quantity}</Text>  
+                  
+                  <View style={styles.buttons}>
+                  <TouchableOpacity onPress={()=>{handleDeleteItem(item.itemCode)}}>
+                    <FontAwesome5 name={'trash'} size={20} color={'red'}/>
+                </TouchableOpacity> 
+                <TouchableOpacity onPress={()=>{handleEditItem(item.itemCode)}}>
+                    <FontAwesome5 name={'pen'} size={20} color={'blue'}/>
+                </TouchableOpacity> 
+                </View>
+                  </View>
+                </View>                
+            )}
+            keyExtractor={(item, index) => index.toString()}
+           />
         </View>
     )
 }
 const styles = StyleSheet.create({
+  listContainer: {
+    backgroundColor: 'white',
+    margin: 10,
+    borderRadius: 10,
+    marginHorizontal: 40,
+    paddingLeft: 10,
+    paddingRight: 10,
+    elevation: 5,
+  },
+  insideContainer: {
+    // flexDirection: 'row',
+    marginLeft: 10,
+    marginRight: 5,
+  },
+  buttons: {
+    flexDirection:'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    margin: 10,
+  },
   header: {
     fontSize: 20,
     alignSelf: 'center',
@@ -260,6 +308,19 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginBottom: 15,
   },
+  button: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: 'blue',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    // bottom: 55,
+    right: 10,
+    elevation: 5,
+    top: 10,
+  }, 
   input: {
     backgroundColor: 'white',
     margin: 10,
@@ -274,7 +335,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
   },
-  itemCode: {
+  item: {
     fontWeight: 'bold'
   },
   descriptionTitle: {
@@ -318,6 +379,25 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 50,
   }, 
+  codequ: {
+    marginBottom: 5,
+  },
+  itemButton: {
+    backgroundColor: 'blue',
+    width: 100,
+    height: 50,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+  },
+  itemText: {
+    color: 'white',
+  },
+  lastItem: {
+    marginBottom: 100, // Adjust this value as needed
+},
+
 })
 
 export default CreatePO
