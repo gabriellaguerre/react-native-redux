@@ -5,12 +5,13 @@ import { SelectList } from 'react-native-dropdown-select-list'
 import { selectAllItems, fetchItems } from '../Redux/itemsSlice'
 // import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+// import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import CreatePOModal from './CreatePOModal'
 
 
 
 function CreatePO({navigation}) {
-//   const dispatch = useDispatch();
+//   const dispatch = useDisimport { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'patch();
   const itemList = useSelector(selectAllItems)
 
 //   useEffect(() => {
@@ -229,9 +230,9 @@ const poModalData = (poData) => {
 //       .then(closeModal())
 //   }
 
-    const handleEditItem = (item) => {
-      setModalVisible(true)
-      setEditItem(item)
+    const handleDeleteItem = (itemId) => {
+      const itemDeleted = dataArray.filter(item => item.itemCode !== itemId)
+      setDataArray(itemDeleted)
     }
   
     return (
@@ -253,7 +254,7 @@ const poModalData = (poData) => {
         <FlatList 
             data={dataArray}
             renderItem={({ item }) => (
-                <View style={styles.listContainer}>
+                <View style={[styles.listContainer,index === dataArray.length - 1 && styles.lastItem]}>
                   <View style={styles.insideContainer}>
                   <Text style={styles.item}>Item Code:</Text>
                   <Text style={styles.codequ}>{item.itemCode}</Text>
@@ -261,9 +262,15 @@ const poModalData = (poData) => {
                   <Text style={styles.codequ}>{item.description}</Text>
                   <Text style={styles.item}>Quantity:</Text>
                   <Text style={styles.codequ}>{item.quantity}</Text>  
-                  <TouchableOpacity onPress={()=>{handleEditItem(item)}}>
-                    <FontAwesome5 name={'edit'} size={20} color={'#000080'} />
+                  
+                  <View style={styles.buttons}>
+                  <TouchableOpacity onPress={()=>{handleDeleteItem(item.itemCode)}}>
+                    <FontAwesome5 name={'trash'} size={20} color={'red'}/>
                 </TouchableOpacity> 
+                <TouchableOpacity onPress={()=>{handleEditItem(item.itemCode)}}>
+                    <FontAwesome5 name={'pen'} size={20} color={'blue'}/>
+                </TouchableOpacity> 
+                </View>
                   </View>
                 </View>                
             )}
@@ -277,11 +284,21 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     margin: 10,
     borderRadius: 10,
+    marginHorizontal: 40,
+    paddingLeft: 10,
+    paddingRight: 10,
+    elevation: 5,
   },
   insideContainer: {
     // flexDirection: 'row',
     marginLeft: 10,
     marginRight: 5,
+  },
+  buttons: {
+    flexDirection:'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    margin: 10,
   },
   header: {
     fontSize: 20,
@@ -373,13 +390,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
-
   },
   itemText: {
     color: 'white',
-
-
   },
+  lastItem: {
+    marginBottom: 100, // Adjust this value as needed
+},
+
 })
 
 export default CreatePO
