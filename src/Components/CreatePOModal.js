@@ -13,6 +13,8 @@ function CreatePOModal({ modalVisible, setModalVisible, onSubmitData }) {
   const newList = itemList.items
   const otherList =  newList.map(item => ({ key: item.id.toString(), value: item.code.toString() }))
 
+  // console.log(editItem, 'eeeeeeeeeeeeeee')
+
   const [itemCode, setItemCode] = useState('')
   const [quantity, setQuantity] = useState('')
   
@@ -34,12 +36,15 @@ function CreatePOModal({ modalVisible, setModalVisible, onSubmitData }) {
       <View style={styles.dropDown}>
         <Text style={styles.header}>Create Purchase Order</Text>
         <Text style={styles.itemCode}>Item Code:</Text>
-        <SelectList style={styles.selectList}
+       
+          <SelectList style={styles.selectList}
              setSelected={(val) => setItemCode(val)} 
              data={otherList} // Assuming SelectList requires label and value properties
              placeholder='Select Item Code'
              save='value'
             />
+      
+        
         <Text style={styles.descriptionTitle}>Description:</Text>
         <Text style={styles.description}>{thisItem[0]?.description}</Text>
         <View style={styles.quantityBlock}>
@@ -71,10 +76,10 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginBottom: 15,
   },
-  input: {
-    backgroundColor: 'white',
-    margin: 10,
-  },
+  // input: {
+  //   backgroundColor: 'white',
+  //   margin: 10,
+  // },
   button: {
     width: 100,
     alignSelf:'center',
@@ -84,7 +89,7 @@ const styles = StyleSheet.create({
   dropDown: {
     paddingHorizontal: 20,
     paddingVertical: 10,
-    backgroundColor: 'yellow'
+    backgroundColor: '#9999ff'
   },
   itemCode: {
     fontWeight: 'bold'
@@ -101,18 +106,19 @@ const styles = StyleSheet.create({
   quantityInput: {
     backgroundColor: 'white',
     borderRadius: 5,  
-    width: 40,
+    width: 50,
+    height: 40,
     textAlign: 'center',  
+    // justifyContent: 'center',
     marginLeft: 10,
+    // border: 'white',
   },
   quantityBlock: {
     flexDirection: 'row',
-    
   },
   submit: {
     fontSize: 20,
     color: 'white',
-    // fontWeight: 'bold',
     textAlign: 'center',
   },
   submitButton: {

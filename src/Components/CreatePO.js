@@ -46,6 +46,7 @@ const [modalVisible, setModalVisible] = useState(false)
   const [disabled, setDisabled] = useState(false)
   const [selected, setSelected] = useState('')
   const [dataArray, setDataArray] = useState([])
+  const [editItem, setEditItem] = useState({})
 
   
   const thisItem1 = newList.filter(item => item.code === Number(itemId1))
@@ -228,8 +229,9 @@ const poModalData = (poData) => {
 //       .then(closeModal())
 //   }
 
-    const handleSubmit = () => {
-
+    const handleEditItem = (item) => {
+      setModalVisible(true)
+      setEditItem(item)
     }
   
     return (
@@ -239,7 +241,7 @@ const poModalData = (poData) => {
           transparent={true}
           visible={modalVisible}
           onRequestClose={()=>setModalVisible(!modalVisible)}>
-          <CreatePOModal modalVisible={modalVisible} setModalVisible={setModalVisible} onSubmitData={poModalData}/>
+          <CreatePOModal modalVisible={modalVisible} setModalVisible={setModalVisible} onSubmitData={poModalData} />
           </Modal>
         <Text style={styles.header}>Create Purchase Order</Text>
       
@@ -258,7 +260,10 @@ const poModalData = (poData) => {
                   <Text style={styles.item}>Description:</Text>
                   <Text style={styles.codequ}>{item.description}</Text>
                   <Text style={styles.item}>Quantity:</Text>
-                  <Text style={styles.codequ}>{item.quantity}</Text>   
+                  <Text style={styles.codequ}>{item.quantity}</Text>  
+                  <TouchableOpacity onPress={()=>{handleEditItem(item)}}>
+                    <FontAwesome5 name={'edit'} size={20} color={'#000080'} />
+                </TouchableOpacity> 
                   </View>
                 </View>                
             )}
