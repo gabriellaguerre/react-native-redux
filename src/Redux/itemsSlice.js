@@ -12,15 +12,15 @@ const initialState = {
 }
 
 export const fetchItems = createAsyncThunk('items/fetchItems', async () => {
-  console.log("IN FETCH THUNK kkkkkkkkkkkkkkkkkr")
+  // console.log("IN FETCH THUNK kkkkkkkkkkkkkkkkkr")
   const response = await fetch(getAllItemsURL, {
       method: "GET",
       headers: {"Content-Type": "application/json",}
   })
-  console.log(response, 'rrrrrrrrrrrrrrrrrrrrr')
+  // console.log(response, 'rrrrrrrrrrrrrrrrrrrrr')
   if(response.ok) {
       const data = await response.json()
-      console.log(data, 'DDDDDDDDDDDDDDDDDDDDDD')
+      // console.log(data, 'DDDDDDDDDDDDDDDDDDDDDD')
       return data
 }   
 })

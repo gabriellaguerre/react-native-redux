@@ -13,7 +13,7 @@ function CreatePOModal({ setModalVisible, onSubmitData }) {
   const newList = itemList.items
   const otherList =  newList.map(item => ({ key: item.id.toString(), value: item.code.toString() }))
 
-  console.log(onEditItem, 'eeeeeeeeeeeeeee')
+  // console.log(onEditItem, 'eeeeeeeeeeeeeee')
 
   const [itemCode, setItemCode] = useState('')
   const [quantity, setQuantity] = useState('')

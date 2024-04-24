@@ -7,26 +7,20 @@ import { selectAllItems } from '../Redux/itemsSlice'
 
 
 
-function EditPOModal({ setEditPOVisible, onEditData, onDataArray}) {
+function EditPOModal({ setEditPOVisible, onEditData, onDataArray, editItem}) {
 
-//   const itemList = useSelector(selectAllItems) 
-//   const newList = itemList.items
-//   const otherList =  newList.map(item => ({ key: item.id.toString(), value: item.code.toString() }))
 
-//   console.log(onEditItem, 'eeeeeeeeeeeeeee')
+  console.log(onDataArray, 'eeeeeeeeeeeeeee')
+  console.log(editItem, 'iiiiiiiiiiiiiiiiiiii')
 
-  const [itemCode, setItemCode] = useState(onEditData.itemCode)
-  const [description, setDescription] = useState(onEditData.description)
-  const [quantity, setQuantity] = useState(onEditData.quantity)
+  const [quantity, setQuantity] = useState(editItem.quantity)
   
-  const thisItem = newList.filter(item => item.code === Number(itemCode))
-
   
   const handleSubmit = () => {
    
-        const po = {itemCode: itemCode, description: thisItem[0]?.description, quantity: quantity}
-        // onSubmitData(po)
-        setModalVisible(false)
+        const po = {itemCode: editItem.itemCode, quantity: quantity}
+        onEditData(po)
+        setEditPOVisible(false)
      
      
     }
@@ -35,9 +29,9 @@ function EditPOModal({ setEditPOVisible, onEditData, onDataArray}) {
       <View style={styles.dropDown}>
         <Text style={styles.header}>Create Purchase Order</Text>
         <Text style={styles.itemCode}>Item Code:</Text>      
-        <Text style={styles.itemCode}>{onEditData.itemCode}</Text>
+        <Text style={styles.itemCode}>{editItem.itemCode}</Text>
         <Text style={styles.descriptionTitle}>Description:</Text>
-        <Text style={styles.description}>{onEditData.description}</Text>
+        <Text style={styles.description}>{editItem.description}</Text>
         <View style={styles.quantityBlock}>
         <Text style={styles.quantity}>Quantity needed:</Text>
         <TextInput 
@@ -49,7 +43,7 @@ function EditPOModal({ setEditPOVisible, onEditData, onDataArray}) {
         </View>
         <View style={styles.buttonView}>
         <TouchableOpacity style={styles.submitButton}  onPress={()=> {handleSubmit();}}>
-        <Text style={styles.submit}>Submit</Text>
+        <Text style={styles.submit}>Edit</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.cancelButton}  onPress={()=> {setEditPOVisible(false);}}>
         <Text style={styles.submit}>Cancel</Text>

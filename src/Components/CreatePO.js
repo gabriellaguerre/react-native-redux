@@ -5,6 +5,7 @@ import { SelectList } from 'react-native-dropdown-select-list'
 import { selectAllItems, fetchItems } from '../Redux/itemsSlice'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import CreatePOModal from './CreatePOModal'
+import EditPOModal from './EditPOModal'
 
 
 
@@ -71,7 +72,7 @@ const poModalData = (poData) => {
 
 const poEditModalData = (poEditData) => {
   const editItem = dataArray.find(item => item.itemCode === poEditData.itemCode)
-  console.log(editItem, 'ssssssssssssssss')
+  editItem.quantity = poEditData.quantity
 }
 
 
@@ -148,7 +149,7 @@ const poEditModalData = (poEditData) => {
           transparent={true}
           visible={editPOVisible}
           onRequestClose={()=>setEditPOVisible(!editPOVisible)}>
-          <EditPOModal setEditPOVisible={setEditPOVisible} onEditData={poEditModalData} onDataArray={dataArray}/>
+          <EditPOModal setEditPOVisible={setEditPOVisible} onEditData={poEditModalData} onDataArray={dataArray} editItem={editItem}/>
           </Modal>
         <Text style={styles.header}>Create Purchase Order</Text>
       
@@ -173,7 +174,7 @@ const poEditModalData = (poEditData) => {
                   <TouchableOpacity onPress={()=>{handleDeleteItem(item.itemCode)}}>
                     <FontAwesome5 name={'trash'} size={20} color={'red'}/>
                 </TouchableOpacity> 
-                <TouchableOpacity onPress={()=>{setEditItem(item); setModalVisible(!editPOVisible)}}>
+                <TouchableOpacity onPress={()=>{setEditItem(item); setEditPOVisible(!editPOVisible)}}>
                     <FontAwesome5 name={'pen'} size={20} color={'blue'}/>
                 </TouchableOpacity> 
                 </View>
