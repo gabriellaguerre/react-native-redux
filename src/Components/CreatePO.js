@@ -3,10 +3,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Modal, StyleSheet, Text, TextInput, View, Alert, TouchableOpacity, FlatList } from 'react-native'
 import { SelectList } from 'react-native-dropdown-select-list'
 import { selectAllItems, fetchItems } from '../Redux/itemsSlice'
-// import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
-// import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import CreatePOModal from './CreatePOModal'
+
 
 
 
@@ -19,6 +18,7 @@ function CreatePO({navigation}) {
 // }, [dispatch])
 
 const [modalVisible, setModalVisible] = useState(false)
+const [editPOVisible, setEditPOVisible] = useState(false)
   
 
 
@@ -69,112 +69,11 @@ const poModalData = (poData) => {
   // console.log(dataArray, 'aaaaaaaaaaaaaaa')
 }
 
-// console.log(dataArray, 'aaaaaaaaaaaaaaa')
-//   useEffect(() => {
+const poEditModalData = (poEditData) => {
+  const editItem = dataArray.find(item => item.itemCode === poEditData.itemCode)
+  console.log(editItem, 'ssssssssssssssss')
+}
 
-//       if (itemId1.length === 0 && itemId2.length === 0 && itemId3.length === 0) {
-//           setDisabled(true)
-
-//       } else if (itemId1.length > 0 && quantity1.length === 0 && itemId2.length === 0 && itemId3.length === 0) {
-//           setDisabled(true)
-
-//       } else if (itemId1.length > 0 && quantity1.length > 0 && +quantity1 && itemId2.length === 0 && itemId3.length === 0 && quantity2.length === 0 && quantity3.length === 0) {
-//           setDisabled(false)
-//           setErrors([])
-
-//       } else if (itemId1.length > 0 && quantity1.length > 0 && !+quantity1 && itemId2.length === 0 && itemId3.length === 0 && quantity2.length === 0 && quantity3.length === 0) {
-//           setDisabled(true)
-//           let errors = ['Enter a valid Quantity']
-//           setErrors(errors)
-
-//       } else if (itemId1.length > 0 && quantity1.length > 0 && itemId2.length > 0 && quantity2.length === 0 && itemId3.length === 0 && quantity3.length === 0 && itemId1 === itemId2) {
-//           setDisabled(true)
-//           let errors = ['*2 Items have the same Item Code']
-//           setErrors(errors)
-
-//       } else if (itemId1.length > 0 && quantity1.length > 0 && itemId2.length > 0 && quantity2.length === 0 && itemId3.length === 0 && quantity3.length === 0 && itemId1 !== itemId2) {
-//           setDisabled(true)
-//           setErrors([])
-
-//       } else if (itemId1.length > 0 && quantity1.length > 0 && +quantity1 && itemId2.length > 0 && quantity2.length > 0 && +quantity2 && itemId1 !== itemId2 && itemId3.length === 0 && quantity3.length === 0) {
-//           setDisabled(false)
-//           setErrors([])
-
-//       } else if (itemId1.length > 0 && quantity1.length > 0 && +quantity1 && itemId2.length > 0 && quantity2.length > 0 && !+quantity2 && itemId1 !== itemId2 && itemId3.length === 0 && quantity3.length === 0) {
-//           setDisabled(true)
-//           let errors = ['Enter a valid Quantity']
-//           setErrors(errors)
-
-//       } else if (itemId1.length > 0 && quantity1.length > 0 && +quantity1 && itemId2.length > 0 && quantity2.length > 0 && +quantity2 && itemId1 === itemId2 && itemId3.length === 0 && quantity3.length === 0) {
-//           setDisabled(true)
-//           let errors = ['*2 Items have the same Item Code']
-//           setErrors(errors)
-
-//       } else if ((itemId1.length > 0 && quantity1.length > 0) && (itemId2.length > 0 && quantity2.length > 0) && (itemId3.length > 0 && quantity3.length === 0)
-//           && (itemId1 === itemId3 || itemId2 === itemId3)) {
-//           setDisabled(true)
-//           let errors = ['*2 Items have the same Item Code']
-//           setErrors(errors)
-
-//       } else if (itemId1.length > 0 && quantity1.length > 0 && itemId2.length > 0 && quantity2.length > 0 && itemId3.length > 0 && quantity3.length === 0) {
-//           setDisabled(true)
-//           setErrors([])
-
-//       } else if ((!+quantity1 && quantity1.length > 0) || (!+quantity2 && quantity2.length > 0) || (!+quantity3 && quantity3.length > 0)) {
-//           let errors = ['*Enter a valid Quantity']
-//           setDisabled(true)
-//           setErrors(errors)
-
-//       } else {
-//           setDisabled(false)
-//           setErrors([])
-//       }
-
-//   }, [itemId2, itemId3, itemId1, quantity1, quantity2, quantity3, thisItem1, thisItem2, thisItem3, disabled, signed])
-
-//   const createPurchaseOrder = async () => {
-
-//       const poResponse = await dispatch(POsActions.createPurchaseOrder(formData));
-
-//       if (poResponse) {
-//           const itemsToCreate = [
-//               { itemId: itemId1, quantity: quantity1 },
-//               { itemId: itemId2, quantity: quantity2 },
-//               { itemId: itemId3, quantity: quantity3 },
-//           ];
-
-//           for (const { itemId, quantity } of itemsToCreate) {
-//               if (itemId && +quantity) {
-//                   await dispatch(PurchaseOrderItemsActions.createPOItem(itemId, { quantity }));
-//               }
-//           }
-//           await dispatch(POsActions.resetState())
-//           .then(await dispatch(POsActions.getPOSByPage(0)))
-//           .then(()=> {if(updatePage) updatePage(0)})
-//           .then(history.push('/purchase_orders'))
-//           .then(closeModal())
-
-//       } else {
-//           setErrors(['Error processing your purchase order'])
-//       }
-//   }
-
-//   const onSubmit = async (e) => {
-//       e.preventDefault()
-
-//       if (signed) {
-//           const canvas = canvasRef.current;
-//           let signatureDataURL = canvas.toDataURL('image/png');
-//           const parts = signatureDataURL.split(",");
-//           const base64Content = parts[1];
-//           formData.append('image', base64Content)
-
-//           await createPurchaseOrder()
-
-
-//       }
-
-//   }
 
 
   const startDrawing = (e) => {
@@ -242,7 +141,14 @@ const poModalData = (poData) => {
           transparent={true}
           visible={modalVisible}
           onRequestClose={()=>setModalVisible(!modalVisible)}>
-          <CreatePOModal modalVisible={modalVisible} setModalVisible={setModalVisible} onSubmitData={poModalData} />
+          <CreatePOModal setModalVisible={setModalVisible} onSubmitData={poModalData} onEditItem={editItem}/>
+          </Modal>
+          <Modal 
+          animationType='slide'
+          transparent={true}
+          visible={editPOVisible}
+          onRequestClose={()=>setEditPOVisible(!editPOVisible)}>
+          <EditPOModal setEditPOVisible={setEditPOVisible} onEditData={poEditModalData} onDataArray={dataArray}/>
           </Modal>
         <Text style={styles.header}>Create Purchase Order</Text>
       
@@ -254,7 +160,7 @@ const poModalData = (poData) => {
         <FlatList 
             data={dataArray}
             renderItem={({ item }) => (
-                <View style={[styles.listContainer,index === dataArray.length - 1 && styles.lastItem]}>
+                <View style={[styles.listContainer && styles.lastItem]}>
                   <View style={styles.insideContainer}>
                   <Text style={styles.item}>Item Code:</Text>
                   <Text style={styles.codequ}>{item.itemCode}</Text>
@@ -267,7 +173,7 @@ const poModalData = (poData) => {
                   <TouchableOpacity onPress={()=>{handleDeleteItem(item.itemCode)}}>
                     <FontAwesome5 name={'trash'} size={20} color={'red'}/>
                 </TouchableOpacity> 
-                <TouchableOpacity onPress={()=>{handleEditItem(item.itemCode)}}>
+                <TouchableOpacity onPress={()=>{setEditItem(item); setModalVisible(!editPOVisible)}}>
                     <FontAwesome5 name={'pen'} size={20} color={'blue'}/>
                 </TouchableOpacity> 
                 </View>
@@ -401,3 +307,111 @@ const styles = StyleSheet.create({
 })
 
 export default CreatePO
+
+
+// console.log(dataArray, 'aaaaaaaaaaaaaaa')
+//   useEffect(() => {
+
+//       if (itemId1.length === 0 && itemId2.length === 0 && itemId3.length === 0) {
+//           setDisabled(true)
+
+//       } else if (itemId1.length > 0 && quantity1.length === 0 && itemId2.length === 0 && itemId3.length === 0) {
+//           setDisabled(true)
+
+//       } else if (itemId1.length > 0 && quantity1.length > 0 && +quantity1 && itemId2.length === 0 && itemId3.length === 0 && quantity2.length === 0 && quantity3.length === 0) {
+//           setDisabled(false)
+//           setErrors([])
+
+//       } else if (itemId1.length > 0 && quantity1.length > 0 && !+quantity1 && itemId2.length === 0 && itemId3.length === 0 && quantity2.length === 0 && quantity3.length === 0) {
+//           setDisabled(true)
+//           let errors = ['Enter a valid Quantity']
+//           setErrors(errors)
+
+//       } else if (itemId1.length > 0 && quantity1.length > 0 && itemId2.length > 0 && quantity2.length === 0 && itemId3.length === 0 && quantity3.length === 0 && itemId1 === itemId2) {
+//           setDisabled(true)
+//           let errors = ['*2 Items have the same Item Code']
+//           setErrors(errors)
+
+//       } else if (itemId1.length > 0 && quantity1.length > 0 && itemId2.length > 0 && quantity2.length === 0 && itemId3.length === 0 && quantity3.length === 0 && itemId1 !== itemId2) {
+//           setDisabled(true)
+//           setErrors([])
+
+//       } else if (itemId1.length > 0 && quantity1.length > 0 && +quantity1 && itemId2.length > 0 && quantity2.length > 0 && +quantity2 && itemId1 !== itemId2 && itemId3.length === 0 && quantity3.length === 0) {
+//           setDisabled(false)
+//           setErrors([])
+
+//       } else if (itemId1.length > 0 && quantity1.length > 0 && +quantity1 && itemId2.length > 0 && quantity2.length > 0 && !+quantity2 && itemId1 !== itemId2 && itemId3.length === 0 && quantity3.length === 0) {
+//           setDisabled(true)
+//           let errors = ['Enter a valid Quantity']
+//           setErrors(errors)
+
+//       } else if (itemId1.length > 0 && quantity1.length > 0 && +quantity1 && itemId2.length > 0 && quantity2.length > 0 && +quantity2 && itemId1 === itemId2 && itemId3.length === 0 && quantity3.length === 0) {
+//           setDisabled(true)
+//           let errors = ['*2 Items have the same Item Code']
+//           setErrors(errors)
+
+//       } else if ((itemId1.length > 0 && quantity1.length > 0) && (itemId2.length > 0 && quantity2.length > 0) && (itemId3.length > 0 && quantity3.length === 0)
+//           && (itemId1 === itemId3 || itemId2 === itemId3)) {
+//           setDisabled(true)
+//           let errors = ['*2 Items have the same Item Code']
+//           setErrors(errors)
+
+//       } else if (itemId1.length > 0 && quantity1.length > 0 && itemId2.length > 0 && quantity2.length > 0 && itemId3.length > 0 && quantity3.length === 0) {
+//           setDisabled(true)
+//           setErrors([])
+
+//       } else if ((!+quantity1 && quantity1.length > 0) || (!+quantity2 && quantity2.length > 0) || (!+quantity3 && quantity3.length > 0)) {
+//           let errors = ['*Enter a valid Quantity']
+//           setDisabled(true)
+//           setErrors(errors)
+
+//       } else {
+//           setDisabled(false)
+//           setErrors([])
+//       }
+
+//   }, [itemId2, itemId3, itemId1, quantity1, quantity2, quantity3, thisItem1, thisItem2, thisItem3, disabled, signed])
+
+//   const createPurchaseOrder = async () => {
+
+//       const poResponse = await dispatch(POsActions.createPurchaseOrder(formData));
+
+//       if (poResponse) {
+//           const itemsToCreate = [
+//               { itemId: itemId1, quantity: quantity1 },
+//               { itemId: itemId2, quantity: quantity2 },
+//               { itemId: itemId3, quantity: quantity3 },
+//           ];
+
+//           for (const { itemId, quantity } of itemsToCreate) {
+//               if (itemId && +quantity) {
+//                   await dispatch(PurchaseOrderItemsActions.createPOItem(itemId, { quantity }));
+//               }
+//           }
+//           await dispatch(POsActions.resetState())
+//           .then(await dispatch(POsActions.getPOSByPage(0)))
+//           .then(()=> {if(updatePage) updatePage(0)})
+//           .then(history.push('/purchase_orders'))
+//           .then(closeModal())
+
+//       } else {
+//           setErrors(['Error processing your purchase order'])
+//       }
+//   }
+
+//   const onSubmit = async (e) => {
+//       e.preventDefault()
+
+//       if (signed) {
+//           const canvas = canvasRef.current;
+//           let signatureDataURL = canvas.toDataURL('image/png');
+//           const parts = signatureDataURL.split(",");
+//           const base64Content = parts[1];
+//           formData.append('image', base64Content)
+
+//           await createPurchaseOrder()
+
+
+//       }
+
+//   }
