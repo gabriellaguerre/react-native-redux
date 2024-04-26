@@ -1,55 +1,37 @@
 import React, { useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { StyleSheet, Text, TextInput, View, Alert, TouchableOpacity } from 'react-native'
 import { SelectList } from 'react-native-dropdown-select-list'
 import { selectAllItems } from '../Redux/itemsSlice'
-import { poAdded } from '../Redux/posSlice'
 
 
 
 
-function CreatePOModal({ setModalVisible, onSubmitData }) {
+function EditPOModal({ setEditPOVisible, onEditData, onDataArray, editItem}) {
 
-  const dispatch = useDispatch()
 
-  const itemList = useSelector(selectAllItems) 
-  const newList = itemList.items
-  const otherList =  newList.map(item => ({ key: item.id.toString(), value: item.code.toString() }))
+  console.log(onDataArray, 'eeeeeeeeeeeeeee')
+  console.log(editItem, 'iiiiiiiiiiiiiiiiiiii')
 
-  // console.log(onEditItem, 'eeeeeeeeeeeeeee')
-
-  const [itemCode, setItemCode] = useState('')
-  const [quantity, setQuantity] = useState('')
+  const [quantity, setQuantity] = useState(editItem.quantity)
   
-  const thisItem = newList.filter(item => item.code === Number(itemCode))
-
   
   const handleSubmit = () => {
-    if(!itemCode || !quantity) {
-      Alert.alert('Warning', 'Cannot submit with empty fields')
-      } else {
-        const po = {itemCode: itemCode, description: thisItem[0]?.description, quantity: quantity}
-        // onSubmitData(po)
-        dispatch(poAdded(po))
-        setModalVisible(false)
-      }
+   
+        const po = {itemCode: editItem.itemCode, quantity: quantity}
+        onEditData(po)
+        setEditPOVisible(false)
+     
      
     }
   
     return (
       <View style={styles.dropDown}>
         <Text style={styles.header}>Create Purchase Order</Text>
-        <Text style={styles.itemCode}>Item Code:</Text>
-       
-          <SelectList style={styles.selectList}
-             setSelected={(val) => setItemCode(val)} 
-             data={otherList} // Assuming SelectList requires label and value properties
-             placeholder='Select Item Code'
-             save='value'
-            />
-      
+        <Text style={styles.itemCode}>Item Code:</Text>      
+        <Text style={styles.itemCode}>{editItem.itemCode}</Text>
         <Text style={styles.descriptionTitle}>Description:</Text>
-        <Text style={styles.description}>{thisItem[0]?.description}</Text>
+        <Text style={styles.description}>{editItem.description}</Text>
         <View style={styles.quantityBlock}>
         <Text style={styles.quantity}>Quantity needed:</Text>
         <TextInput 
@@ -61,9 +43,9 @@ function CreatePOModal({ setModalVisible, onSubmitData }) {
         </View>
         <View style={styles.buttonView}>
         <TouchableOpacity style={styles.submitButton}  onPress={()=> {handleSubmit();}}>
-        <Text style={styles.submit}>Submit</Text>
+        <Text style={styles.submit}>Edit</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.cancelButton}  onPress={()=> {setModalVisible(false);}}>
+        <TouchableOpacity style={styles.cancelButton}  onPress={()=> {setEditPOVisible(false);}}>
         <Text style={styles.submit}>Cancel</Text>
         </TouchableOpacity>
         </View>
@@ -152,4 +134,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default CreatePOModal;
+export default EditPOModal;
