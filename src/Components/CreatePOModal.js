@@ -1,13 +1,16 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { StyleSheet, Text, TextInput, View, Alert, TouchableOpacity } from 'react-native'
 import { SelectList } from 'react-native-dropdown-select-list'
 import { selectAllItems } from '../Redux/itemsSlice'
+import { poAdded } from '../Redux/posSlice'
 
 
 
 
 function CreatePOModal({ setModalVisible, onSubmitData }) {
+
+  const dispatch = useDispatch()
 
   const itemList = useSelector(selectAllItems) 
   const newList = itemList.items
@@ -26,7 +29,8 @@ function CreatePOModal({ setModalVisible, onSubmitData }) {
       Alert.alert('Warning', 'Cannot submit with empty fields')
       } else {
         const po = {itemCode: itemCode, description: thisItem[0]?.description, quantity: quantity}
-        onSubmitData(po)
+        // onSubmitData(po)
+        dispatch(poAdded(po))
         setModalVisible(false)
       }
      

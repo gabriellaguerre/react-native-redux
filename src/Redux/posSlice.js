@@ -15,13 +15,24 @@ const initialState = {
 const posSlice = createSlice({
     name: 'pos',
     initialState,
-    reducers: { }
+    reducers: {
+      poAdded(state, action) {
+        state.pos.push(action.payload)
+      },
+      deletePO(state, action) {
+        const code = action.payload
+        console.log(code, 'codeeeeeeeeeeeeeeeeeee')
+        const thist = state.pos.filter(item => item.itemCode !== code.toString())
+        console.log(thist,'thistttttttttt')
+        return thist
+      }
+     }
 })
 
-// export const selectAllUsers = (state) => state.users.users;
+export const selectAlllPos = (state) => state.pos.pos;
 // export const getUsersStatus = (state) => state.users.status;
 // export const getUsersError = (state) => state.users.error;
 
-// export const { userAdded } = usersSlice.actions
+export const { poAdded, deletePO } = posSlice.actions
 
 export default posSlice.reducer

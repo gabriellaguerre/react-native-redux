@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Modal, StyleSheet, Text, TextInput, View, Alert, TouchableOpacity, FlatList } from 'react-native'
+import { Modal, StyleSheet, Text, TextInput, View, Alert, TouchableOpacity, FlatList, Button } from 'react-native'
 import { SelectList } from 'react-native-dropdown-select-list'
 import { selectAllItems, fetchItems } from '../Redux/itemsSlice'
+import { selectAlllPos, deletePO } from '../Redux/posSlice'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import CreatePOModal from './CreatePOModal'
 import EditPOModal from './EditPOModal'
@@ -11,22 +12,20 @@ import EditPOModal from './EditPOModal'
 
 
 function CreatePO({navigation}) {
-//   const dispatch = useDisimport { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'patch();
+  const dispatch = useDispatch();
   const itemList = useSelector(selectAllItems)
+  const pos = useSelector(selectAlllPos)
 
-//   useEffect(() => {
-//     dispatch(fetchItems())
-// }, [dispatch])
 
 const [modalVisible, setModalVisible] = useState(false)
 const [editPOVisible, setEditPOVisible] = useState(false)
   
-
+console.log(pos, 'ppppppppppppppppp')
 
   // console.log(itemList.items, 'oooooooooooooo')
   const newList = itemList.items
   // console.log(newList, 'nnnnnnnnnnn')
-  const otherList =  newList.map(item => ({ key: item.id.toString(), value: item.code.toString() }))
+  // const otherList =  newList.map(item => ({ key: item.id.toString(), value: item.code.toString() }))
   // console.log(otherList, 'tttttttttttt')
 //   console.log(newList, 'llllllllllllllllllllllllllllll')
 //   console.log(otherList, 'ppppppppppppppp')
@@ -51,18 +50,13 @@ const [editPOVisible, setEditPOVisible] = useState(false)
   const [editItem, setEditItem] = useState({})
 
   
-  const thisItem1 = newList.filter(item => item.code === Number(itemId1))
-  const thisItem2 = useSelector(state => state.items[itemId2])
-  const thisItem3 = useSelector(state => state.items[itemId3])
+  // const thisItem1 = newList.filter(item => item.code === Number(itemId1))
+  // const thisItem2 = useSelector(state => state.items[itemId2])
+  // const thisItem3 = useSelector(state => state.items[itemId3])
   // console.log(thisItem1, 'sssssssssssssssssssssssssssssssss')
 
-//   let updatedItemList = []
 
-//   for (let i = 0; i < itemList.length - 1; i++) {
-//       let item = itemList[i]
-//       updatedItemList.push(item)
-//   }
-// let dataArray = []
+//  console.log(dataArray, 'lllllllllllllll')
 
 const poModalData = (poData) => {
   // console.log(poData,'ppppppppppppppppp')
@@ -131,8 +125,9 @@ const poEditModalData = (poEditData) => {
 //   }
 
     const handleDeleteItem = (itemId) => {
-      const itemDeleted = dataArray.filter(item => item.itemCode !== itemId)
-      setDataArray(itemDeleted)
+      const itemDeleted = pos.filter(item => item.itemCode === itemId)
+      dispatch(deletePO(itemDeleted[0].itemCode))
+      // console.log(itemDeleted[0].itemCode, 'dddddddddddddd')
     }
   
     return (
@@ -157,11 +152,11 @@ const poEditModalData = (poEditData) => {
             <Text style={styles.itemText}>Add Items</Text>
         </TouchableOpacity>
        
-        
+        <View style={styles.flatlist}>
         <FlatList 
-            data={dataArray}
+            data={pos}
             renderItem={({ item }) => (
-                <View style={[styles.listContainer && styles.lastItem]}>
+                <View style={styles.listContainer}>
                   <View style={styles.insideContainer}>
                   <Text style={styles.item}>Item Code:</Text>
                   <Text style={styles.codequ}>{item.itemCode}</Text>
@@ -183,23 +178,29 @@ const poEditModalData = (poEditData) => {
             )}
             keyExtractor={(item, index) => index.toString()}
            />
+          </View>
+           {/* <Button
+            title='This is the end of the list' /> */}
         </View>
     )
 }
 const styles = StyleSheet.create({
   listContainer: {
+    width: '90%',
     backgroundColor: 'white',
     margin: 10,
+    alignSelf: 'center',
     borderRadius: 10,
     marginHorizontal: 40,
+    marginVertical: 10,
     paddingLeft: 10,
     paddingRight: 10,
     elevation: 5,
+    marginBottom: 10,
   },
-  insideContainer: {
-    // flexDirection: 'row',
-    marginLeft: 10,
-    marginRight: 5,
+  flatlist: {
+   backgroundColor: 'green',
+   margin: 10,
   },
   buttons: {
     flexDirection:'row',
@@ -215,29 +216,26 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginBottom: 15,
   },
-  button: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: 'blue',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    // bottom: 55,
-    right: 10,
-    elevation: 5,
-    top: 10,
-  }, 
+  // button: {
+  //   width: 60,
+  //   height: 60,
+  //   borderRadius: 30,
+  //   backgroundColor: 'blue',
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   position: 'absolute',
+  //   // bottom: 55,
+  //   right: 10,
+  //   elevation: 5,
+  //   top: 10,
+  // }, 
   input: {
     backgroundColor: 'white',
     margin: 10,
   },
-  button: {
-    width: 100,
-    alignSelf:'center',
-    margin: 10,
-    backgroundColor: 'green'
-  },
+  // itemButton: {
+  //   marginBottom: 50,
+  // },
   dropDown: {
     paddingHorizontal: 20,
     paddingVertical: 10,
@@ -301,9 +299,9 @@ const styles = StyleSheet.create({
   itemText: {
     color: 'white',
   },
-  lastItem: {
-    marginBottom: 100, // Adjust this value as needed
-},
+//   lastItem: {
+//     marginBottom: 100, // Adjust this value as needed
+// },
 
 })
 
